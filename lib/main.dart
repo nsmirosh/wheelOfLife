@@ -54,7 +54,7 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            buildInputFields(),
+            ...buildInputFields(),
             TextButton(
               onPressed: () {
                 setState(() {
@@ -77,34 +77,32 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget buildInputFields() {
-
-    for(var i = areasOfLife; i >= 1; i-- ) {
-
-    }
-    return Row(
-      children: [
-        SizedBox(
-          width: 300,
-          child: TextField(
-            controller: firstAreaNameController,
-            decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-                hintText: 'Enter your first area of life'),
-          ),
-        ),
-        SizedBox(
-            width: 300,
-            child: FlutterSlider(
-              values: [_lowerValue],
-              max: 10,
-              min: 0,
-              onDragging: (handlerIndex, lowerValue, upperValue) {
-                _lowerValue = lowerValue;
-                setState(() {});
-              },
-            )),
-      ],
+  List<Widget> buildInputFields() {
+    return List.generate(areasOfLife, (index) =>
+        Row(
+          children: [
+            SizedBox(
+              width: 300,
+              child: TextField(
+                controller: firstAreaNameController,
+                decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    hintText: 'Enter your first area of life'),
+              ),
+            ),
+            SizedBox(
+                width: 300,
+                child: FlutterSlider(
+                  values: [_lowerValue],
+                  max: 10,
+                  min: 0,
+                  onDragging: (handlerIndex, lowerValue, upperValue) {
+                    _lowerValue = lowerValue;
+                    setState(() {});
+                  },
+                )),
+          ],
+        )
     );
   }
 
