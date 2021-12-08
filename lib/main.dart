@@ -31,23 +31,17 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // final firstAreaNameController = TextEditingController();
-
   final List<TextEditingController> _controllers = [];
   final List<TextField> _fields = [];
+  final List<double> _sliderValues = [];
 
   var visible = false;
   var areasOfLife = 1;
-  final defaultSeekerValue = 5;
-
-  var map = Map<int, int>();
+  final DEFAULT_SEEKER_VALUE = 5.0;
 
   @override
   void initState() {
     super.initState();
-    List.generate(areasOfLife,
-            (index) => map.putIfAbsent(index, () => defaultSeekerValue));
-    print(" map after initState = $map");
   }
 
   @override
@@ -80,6 +74,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 setState(() {
                   _controllers.add(controller);
                   _fields.add(field);
+                  _sliderValues.add(DEFAULT_SEEKER_VALUE);
                 });
               },
               child: const Text(
@@ -102,24 +97,16 @@ class _MyHomePageState extends State<MyHomePage> {
       itemBuilder: (context, index) {
         return Row(
           children: [
-            SizedBox(
-              width: 300,
-              child: _fields[index]
-            ),
+            SizedBox(width: 300, child: _fields[index]),
             SizedBox(
               width: 300,
               child: FlutterSlider(
-                values: [
-                  map[index]?.toDouble() ?? defaultSeekerValue.toDouble()
-                ],
+                values: [_sliderValues[index].toDouble()],
                 max: 10,
                 min: 0,
                 onDragCompleted: (handlerIndex, lowerValue, upperValue) {
                   setState(() {
-                    print(" index = $index");
-                    print(" lowerValue = $lowerValue");
-                    map.update(index, lowerValue);
-                    print(" map = $map");
+                    _sliderValues[index] = lowerValue.toDouble();
                   });
                 },
               ),
@@ -133,12 +120,11 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buildBottomView() {
     return Column(
       children: List.generate(
-        areasOfLife,
-            (index) =>
-            Text(
-              "area of life = ",
-              style: const TextStyle(color: Colors.amber),
-            ),
+        _controllers.length,
+        (index) => Text(
+          "area of life = ${_controllers[index].text}, value = ${_sliderValues[index]}",
+          style: const TextStyle(color: Colors.amber),
+        ),
       ),
     );
   }
