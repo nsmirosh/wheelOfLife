@@ -34,14 +34,41 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<TextEditingController> _controllers = [];
   final List<TextField> _fields = [];
   final List<double> _sliderValues = [];
+  final List<String> _initialAreasOfLife = [
+    "Health & Fitness",
+    "Money",
+    "Career / Business",
+    "Social / Friends",
+    // "Love, Family, Kids",
+    // "Personal Growth",
+    // "Fun",
+    // "Spirituality",
+  ];
 
-  var visible = false;
   var areasOfLife = 1;
   final DEFAULT_SEEKER_VALUE = 5.0;
 
   @override
   void initState() {
     super.initState();
+
+    for (var areaOfLife in _initialAreasOfLife) {
+      final controller = TextEditingController();
+      controller.text = areaOfLife;
+      controller.addListener(() => {setState(() {})});
+      final field = TextField(
+        controller: controller,
+        decoration: InputDecoration(
+          border: OutlineInputBorder(),
+          labelText: "some input",
+        ),
+      );
+
+      print("_controllers = $_controllers");
+      _controllers.add(controller);
+      _fields.add(field);
+      _sliderValues.add(DEFAULT_SEEKER_VALUE);
+    }
   }
 
   @override
