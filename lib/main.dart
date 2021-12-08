@@ -64,6 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               onPressed: () {
                 final controller = TextEditingController();
+                controller.addListener(() => {setState(() {})});
                 final field = TextField(
                   controller: controller,
                   decoration: InputDecoration(
