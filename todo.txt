@@ -9,7 +9,9 @@
 [x] - make the seekbar with values only 0 to 10
 [ ] - make the input for the are of life and the slide for that area half the screen width each
 [x] - add a button for adding more inputs
-[ ] - make each independent and display their results whenever something changes
+[x] - make each input independent
+[ ] - display their results on button click
+[ ] - display their results whenever something changes
 [ ] - by default show 8 controls with pre-defined areas of life
 2. Add the ability to remove and add these controls if people don't need 8 areas of life
 2a. Show the results on button click of all othe values enterd

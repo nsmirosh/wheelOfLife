@@ -31,18 +31,31 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final firstAreaNameController = TextEditingController();
+  // final firstAreaNameController = TextEditingController();
+
+  final List<TextEditingController> _controllers = [];
+  final List<TextField> _fields = [];
 
   var visible = false;
-
-  var _lowerValue = 5.0;
-
   var areasOfLife = 1;
+  final defaultSeekerValue = 5;
+
+  var map = Map<int, int>();
+
+  @override
+  void initState() {
+    super.initState();
+    List.generate(areasOfLife,
+            (index) => map.putIfAbsent(index, () => defaultSeekerValue));
+    print(" map after initState = $map");
+  }
 
   @override
   void dispose() {
-    firstAreaNameController.dispose();
     super.dispose();
+    for (final controller in _controllers) {
+      controller.dispose();
+    }
   }
 
   @override
@@ -54,15 +67,19 @@ class _MyHomePageState extends State<MyHomePage> {
       body: Center(
         child: Column(
           children: <Widget>[
-            ...buildInputFields(),
             TextButton(
               onPressed: () {
+                final controller = TextEditingController();
+                final field = TextField(
+                  controller: controller,
+                  decoration: InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: "name${_controllers.length + 1}",
+                  ),
+                );
                 setState(() {
-                  if (firstAreaNameController.text.isNotEmpty) {
-                    visible = true;
-                  }
-
-                  areasOfLife++;
+                  _controllers.add(controller);
+                  _fields.add(field);
                 });
               },
               child: const Text(
@@ -70,48 +87,58 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(color: Colors.black),
               ),
             ),
-            buildBottomView(visible, firstAreaNameController.text),
+            _listView(),
+            buildBottomView()
           ],
         ),
       ),
     );
   }
 
-  List<Widget> buildInputFields() {
-    return List.generate(areasOfLife, (index) =>
-        Row(
+  Widget _listView() {
+    return ListView.builder(
+      shrinkWrap: true,
+      itemCount: _fields.length,
+      itemBuilder: (context, index) {
+        return Row(
           children: [
             SizedBox(
               width: 300,
-              child: TextField(
-                controller: firstAreaNameController,
-                decoration: const InputDecoration(
-                    border: OutlineInputBorder(),
-                    hintText: 'Enter your first area of life'),
-              ),
+              child: _fields[index]
             ),
             SizedBox(
-                width: 300,
-                child: FlutterSlider(
-                  values: [_lowerValue],
-                  max: 10,
-                  min: 0,
-                  onDragging: (handlerIndex, lowerValue, upperValue) {
-                    _lowerValue = lowerValue;
-                    setState(() {});
-                  },
-                )),
+              width: 300,
+              child: FlutterSlider(
+                values: [
+                  map[index]?.toDouble() ?? defaultSeekerValue.toDouble()
+                ],
+                max: 10,
+                min: 0,
+                onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                  setState(() {
+                    print(" index = $index");
+                    print(" lowerValue = $lowerValue");
+                    map.update(index, lowerValue);
+                    print(" map = $map");
+                  });
+                },
+              ),
+            ),
           ],
-        )
+        );
+      },
     );
   }
 
-  Widget buildBottomView(bool shouldShow, String area) {
-    return Visibility(
-      visible: shouldShow,
-      child: Text(
-        "area of life = $area",
-        style: const TextStyle(color: Colors.amber),
+  Widget buildBottomView() {
+    return Column(
+      children: List.generate(
+        areasOfLife,
+            (index) =>
+            Text(
+              "area of life = ",
+              style: const TextStyle(color: Colors.amber),
+            ),
       ),
     );
   }
