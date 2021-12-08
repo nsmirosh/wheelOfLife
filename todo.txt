@@ -7,14 +7,22 @@
 [x] - extract building the input fields into a separate function
 [x] - implement a seekbar
 [x] - make the seekbar with values only 0 to 10
-[ ] - make the input for the are of life and the slide for that area half the screen width each
 [x] - add a button for adding more inputs
 [x] - make each input independent
 [x] - display their results on button click
 [x] - display their results whenever text changes in any of the text fields
-[ ] - by default show 8 controls with pre-defined areas of life
-[ ] - Add the ability to remove controls
-[ ] - check that the user won't be able to delete the last 2 inputs
+[x] - by default show 8 controls with pre-defined areas of life
+[x] - Add the ability to remove controls
+    [x] - add the delete butotn everywhere
+    [x] - delete and update the views
+    [x] - check that the user won't be able to delete the last 2 inputs
+    [x] - show a dialog saying why they can't delete it
+
+[ ] - fix the screen overflow issue
+[ ] - make the input for the are of life and the slide for that area half the screen width each
+
+[ ] - limit to a maximum number of life areas?
+
 
 ========= DISPLAYING THE WHEEL OF LIFE ==========
 
@@ -30,4 +38,11 @@
 ====== ADDING AN INTERSTITIAL AD DURING EXPORT ========
 
 
+
+========= TESTING THE WEB APP ON DIFFERENT SCREEN SIZES ==========
+
+
+
 ========= DEPLOYING THE APP ==========
+
+

@@ -47,6 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
 
   var areasOfLife = 1;
   final DEFAULT_SEEKER_VALUE = 5.0;
+  final MINIMUM_AMOUNT_OF_LIFE_AREAS = 2;
 
   @override
   void initState() {
@@ -139,11 +140,57 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
+            TextButton(
+              onPressed: () {
+                setState(() {
+                  if (_controllers.length > MINIMUM_AMOUNT_OF_LIFE_AREAS) {
+                    _sliderValues.remove(_sliderValues[index]);
+                    _controllers.remove(_controllers[index]);
+                    _fields.remove(_fields[index]);
+                  }
+                  else {
+                    _showMyDialog();
+                  }
+                });
+              },
+              child: Text(
+                "delete",
+                style: TextStyle(color: Colors.blueAccent),
+              ),
+            ),
           ],
         );
       },
     );
   }
+
+  Future<void> _showMyDialog() async {
+    return showDialog<void>(
+      context: context,
+      barrierDismissible: false, // user must tap button!
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Sorry'),
+          content: SingleChildScrollView(
+            child: ListBody(
+              children: const <Widget>[
+                Text('You have to have at least 2 life areas in your wheel :) '),
+              ],
+            ),
+          ),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 
   Widget buildBottomView() {
     return Column(
