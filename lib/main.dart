@@ -47,7 +47,7 @@ class _MyHomePageState extends State<MyHomePage> {
   ];
 
   var areasOfLife = 1;
-  final DEFAULT_SEEKER_VALUE = 5.0;
+  final DEFAULT_SEEKER_VALUE = 7.0;
   final MINIMUM_AMOUNT_OF_LIFE_AREAS = 2;
 
   @override
@@ -252,12 +252,12 @@ class WheelPainter extends CustomPainter {
 
     double radius = (2 * math.pi) / values.length;
 
-    canvas.drawPath(getWheelPath(wheelSize, 0, radius, wheelSize),
+    canvas.drawPath(getWheelPath(wheelSize, 0, radius, values[0] * 10),
         getColoredPaint(Colors.red));
 
     for (var i = 1; i < values.length; i++) {
 
-      canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
+      canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, values[i] * 10),
           getColoredPaint(colors[i]));
     }
 /*
