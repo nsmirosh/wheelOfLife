@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'dart:math' as math;
 
-
 void main() {
   runApp(const MyApp());
 }
@@ -117,7 +116,7 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Container(
                 height: 300.0,
               ),
-              painter: WheelPainter(),
+              painter: WheelPainter(_sliderValues.map((e) => e.toInt()).toList()),
             ),
             _listView(),
             buildBottomView()
@@ -126,6 +125,26 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
     );
   }
+
+/*
+  void addField() {
+    final controller = TextEditingController();
+    controller.text = areaOfLife;
+    controller.addListener(() => {setState(() {})});
+    final field = TextField(
+      controller: controller,
+      decoration: InputDecoration(
+        border: OutlineInputBorder(),
+        labelText: "some input",
+      ),
+    );
+
+    print("_controllers = $_controllers");
+    _controllers.add(controller);
+    _fields.add(field);
+    _sliderValues.add(DEFAULT_SEEKER_VALUE);
+
+  }*/
 
   Widget _listView() {
     return ListView.builder(
@@ -155,8 +174,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     _sliderValues.remove(_sliderValues[index]);
                     _controllers.remove(_controllers[index]);
                     _fields.remove(_fields[index]);
-                  }
-                  else {
+                  } else {
                     _showMyDialog();
                   }
                 });
@@ -182,7 +200,8 @@ class _MyHomePageState extends State<MyHomePage> {
           content: SingleChildScrollView(
             child: ListBody(
               children: const <Widget>[
-                Text('You have to have at least 2 life areas in your wheel :) '),
+                Text(
+                    'You have to have at least 2 life areas in your wheel :) '),
               ],
             ),
           ),
@@ -199,7 +218,6 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-
   Widget buildBottomView() {
     return Column(
       children: List.generate(
@@ -213,19 +231,10 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 }
 
-
 class WheelPainter extends CustomPainter {
-  Path getWheelPath(double wheelSize, double fromRadius, double toRadius, double sizeOfRadius) {
-    return Path()
-      ..moveTo(wheelSize, wheelSize)
-      ..arcTo(
-          Rect.fromCircle(
-              radius: sizeOfRadius, center: Offset(wheelSize, wheelSize)),
-          fromRadius,
-          toRadius,
-          false)
-      ..close();
-  }
+  List<int> values = [];
+
+  WheelPainter(this.values);
 
   Paint getColoredPaint(Color color) {
     Paint paint = Paint();
@@ -236,21 +245,47 @@ class WheelPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     double wheelSize = 100;
-    double nbElem = 6;
-    double radius = (2 * math.pi) / nbElem;
+    // double nbElem = 6;
+    // double radius = (2 * math.pi) / nbElem;
 
-    canvas.drawPath(
-        getWheelPath(wheelSize, 0, radius, wheelSize), getColoredPaint(Colors.red));
-    canvas.drawPath(
-        getWheelPath(wheelSize, radius, radius, wheelSize), getColoredPaint(Colors.purple));
+    final colors = [Colors.purple, Colors.blue, Colors.green, Colors.yellow, Colors.orange];
+
+    double radius = (2 * math.pi) / values.length;
+
+    canvas.drawPath(getWheelPath(wheelSize, 0, radius, wheelSize),
+        getColoredPaint(Colors.red));
+
+    for (var i = 1; i < values.length; i++) {
+
+      canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
+          getColoredPaint(colors[i]));
+    }
+/*
+    canvas.drawPath(getWheelPath(wheelSize, 0, radius, wheelSize),
+        getColoredPaint(Colors.red));
+    canvas.drawPath(getWheelPath(wheelSize, radius, radius, wheelSize),
+        getColoredPaint(Colors.purple));
     canvas.drawPath(getWheelPath(wheelSize, radius * 2, radius, wheelSize),
         getColoredPaint(Colors.blue));
-    canvas.drawPath(getWheelPath(wheelSize, radius * 3, radius, 50),
+    canvas.drawPath(getWheelPath(wheelSize, radius * 3, radius, 100),
         getColoredPaint(Colors.green));
     canvas.drawPath(getWheelPath(wheelSize, radius * 4, radius, wheelSize),
         getColoredPaint(Colors.yellow));
     canvas.drawPath(getWheelPath(wheelSize, radius * 5, radius, 20),
-        getColoredPaint(Colors.orange));
+        getColoredPaint(Colors.orange));*/
+  }
+
+  Path getWheelPath(double wheelSize, double fromRadius, double toRadius,
+      double sizeOfRadius) {
+    return Path()
+      ..moveTo(wheelSize, wheelSize)
+      ..arcTo(
+          Rect.fromCircle(
+              radius: sizeOfRadius, center: Offset(wheelSize, wheelSize)),
+          fromRadius,
+          toRadius,
+          false)
+      ..close();
   }
 
   @override

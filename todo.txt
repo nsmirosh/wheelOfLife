@@ -29,7 +29,7 @@
 
 ========= DISPLAYING THE WHEEL OF LIFE ==========
 
-[ ] - transfer the code from the other project into this
+[x] - transfer the code from the other project into this
 [ ] - refactor that code to get rid of the constants and develop an API to interact with my inputs
 [ ] - hook up my inputs with the API developed from the wheel
 [ ] - make sure parts of the pie are deleted and added whenever the inputs are deleted and added
