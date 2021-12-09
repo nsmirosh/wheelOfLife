@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
+import 'dart:math' as math;
+
 
 void main() {
   runApp(const MyApp());
@@ -111,6 +113,12 @@ class _MyHomePageState extends State<MyHomePage> {
                 style: TextStyle(color: Colors.black),
               ),
             ),
+            CustomPaint(
+              child: Container(
+                height: 300.0,
+              ),
+              painter: WheelPainter(),
+            ),
             _listView(),
             buildBottomView()
           ],
@@ -202,5 +210,51 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
+  }
+}
+
+
+class WheelPainter extends CustomPainter {
+  Path getWheelPath(double wheelSize, double fromRadius, double toRadius, double sizeOfRadius) {
+    return Path()
+      ..moveTo(wheelSize, wheelSize)
+      ..arcTo(
+          Rect.fromCircle(
+              radius: sizeOfRadius, center: Offset(wheelSize, wheelSize)),
+          fromRadius,
+          toRadius,
+          false)
+      ..close();
+  }
+
+  Paint getColoredPaint(Color color) {
+    Paint paint = Paint();
+    paint.color = color;
+    return paint;
+  }
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    double wheelSize = 100;
+    double nbElem = 6;
+    double radius = (2 * math.pi) / nbElem;
+
+    canvas.drawPath(
+        getWheelPath(wheelSize, 0, radius, wheelSize), getColoredPaint(Colors.red));
+    canvas.drawPath(
+        getWheelPath(wheelSize, radius, radius, wheelSize), getColoredPaint(Colors.purple));
+    canvas.drawPath(getWheelPath(wheelSize, radius * 2, radius, wheelSize),
+        getColoredPaint(Colors.blue));
+    canvas.drawPath(getWheelPath(wheelSize, radius * 3, radius, 50),
+        getColoredPaint(Colors.green));
+    canvas.drawPath(getWheelPath(wheelSize, radius * 4, radius, wheelSize),
+        getColoredPaint(Colors.yellow));
+    canvas.drawPath(getWheelPath(wheelSize, radius * 5, radius, 20),
+        getColoredPaint(Colors.orange));
+  }
+
+  @override
+  bool shouldRepaint(CustomPainter oldDelegate) {
+    return oldDelegate != this;
   }
 }
