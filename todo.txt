@@ -21,7 +21,7 @@
 [ ] - fix the screen overflow issue
 [ ] - make the input for the are of life and the slide for that area half the screen width each
 [ ] - make maximum number of life areas - 15
-[ ] - code for initialializing inputs - fix the duplication
+[x] - code for initialializing inputs - fix the duplication
 
 ========= DISPLAYING THE WHEEL OF LIFE ==========
 
@@ -30,24 +30,22 @@
 [x] - hook up my inputs with the API developed from the wheel
 [x] - make sure parts of the pie are deleted and added whenever the inputs are deleted and added
 [ ] - make sure that you can add up to 15 areas of life
-[ ] - add a grid above the pies to show at what level is the are of life right now
+[x] - add a grid above the pies to show at what level is the are of life right now
   [x] - add an empty circle
   [x] - build 10 empty circles
   [x] - draw the divider lines between pies
 
-[ ] - draw the circle and make it bigger
+[ ] - center the circle
+[ ] - make the circle bigger
+[ ] - show the text near each area of life
 
 [ ] - refactor the code and optimize it
     [ ] - remove duplication everywhere
     [ ] - remove magic numbers
     [ ] - separate stuff into functions
 
-
-[ ] - add the animations for adding and deleting a point
-
+[ ] - add the animations for adding and deleting a point in the circle
 [ ] - add the ability to change the color palette on pre-defined palettes based on the amount of colors
-
-
 [ ] - add a button saying - we have a palette for the x amount of life areas - would you like to try it out? show a list of palettes
 
 ======= ADDING A BANNER ========

@@ -77,35 +77,35 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          children: <Widget>[
-            TextButton(
-              onPressed: () {
-                final controller = buildTextController();
-                final field = buildTextField(controller);
-                setState(() {
-                  _controllers.add(controller);
-                  _fields.add(field);
-                  _sliderValues.add(DEFAULT_SEEKER_VALUE);
-                });
-              },
-              child: const Text(
-                "add another area",
-                style: TextStyle(color: Colors.black),
-              ),
+      body: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          TextButton(
+            onPressed: () {
+              final controller = buildTextController();
+              final field = buildTextField(controller);
+              setState(() {
+                _controllers.add(controller);
+                _fields.add(field);
+                _sliderValues.add(DEFAULT_SEEKER_VALUE);
+              });
+            },
+            child: const Text(
+              "add another area",
+              style: TextStyle(color: Colors.black),
             ),
-            CustomPaint(
-              child: Container(
-                height: 300.0,
-              ),
-              painter:
-                  WheelPainter(_sliderValues.map((e) => e.toInt()).toList()),
+          ),
+          CustomPaint(
+            child: Container(
+              height: 300.0,
+              width: MediaQuery.of(context).size.width,
             ),
-            _listView(),
-            buildBottomView()
-          ],
-        ),
+            painter:
+                WheelPainter(_sliderValues.map((e) => e.toInt()).toList()),
+          ),
+          _listView(),
+          buildBottomView()
+        ],
       ),
     );
   }
