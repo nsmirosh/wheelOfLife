@@ -77,35 +77,43 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          TextButton(
-            onPressed: () {
-              final controller = buildTextController();
-              final field = buildTextField(controller);
-              setState(() {
-                _controllers.add(controller);
-                _fields.add(field);
-                _sliderValues.add(DEFAULT_SEEKER_VALUE);
-              });
-            },
-            child: const Text(
-              "add another area",
-              style: TextStyle(color: Colors.black),
-            ),
+      body: ListView(
+        children: [
+          Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+
+              CustomPaint(
+                child: Container(
+                  height: 300.0,
+                  width: MediaQuery.of(context).size.width,
+                ),
+                painter:
+                    WheelPainter(_sliderValues.map((e) => e.toInt()).toList()),
+              ),
+              _listView(),
+              addAnotherAreaButton()
+            ],
           ),
-          CustomPaint(
-            child: Container(
-              height: 300.0,
-              width: MediaQuery.of(context).size.width,
-            ),
-            painter:
-                WheelPainter(_sliderValues.map((e) => e.toInt()).toList()),
-          ),
-          _listView(),
-          buildBottomView()
         ],
+      ),
+    );
+  }
+
+  Widget addAnotherAreaButton() {
+    return TextButton(
+      onPressed: () {
+        final controller = buildTextController();
+        final field = buildTextField(controller);
+        setState(() {
+          _controllers.add(controller);
+          _fields.add(field);
+          _sliderValues.add(DEFAULT_SEEKER_VALUE);
+        });
+      },
+      child: const Text(
+        "add another area",
+        style: TextStyle(color: Colors.black),
       ),
     );
   }
@@ -205,7 +213,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget buildBottomView() {
+  /*Widget buildBottomView() {
     return Column(
       children: List.generate(
         _controllers.length,
@@ -215,7 +223,7 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
       ),
     );
-  }
+  }*/
 }
 
 class WheelPainter extends CustomPainter {
