@@ -55,18 +55,8 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
 
     for (var areaOfLife in _initialAreasOfLife) {
-      final controller = TextEditingController();
-      controller.text = areaOfLife;
-      controller.addListener(() => {setState(() {})});
-      final field = TextField(
-        controller: controller,
-        decoration: InputDecoration(
-          border: OutlineInputBorder(),
-          labelText: "some input",
-        ),
-      );
-
-      print("_controllers = $_controllers");
+      final controller = buildTextController(areaOfLife);
+      final field = buildTextField(controller);
       _controllers.add(controller);
       _fields.add(field);
       _sliderValues.add(DEFAULT_SEEKER_VALUE);
@@ -92,15 +82,8 @@ class _MyHomePageState extends State<MyHomePage> {
           children: <Widget>[
             TextButton(
               onPressed: () {
-                final controller = TextEditingController();
-                controller.addListener(() => {setState(() {})});
-                final field = TextField(
-                  controller: controller,
-                  decoration: InputDecoration(
-                    border: OutlineInputBorder(),
-                    labelText: "name${_controllers.length + 1}",
-                  ),
-                );
+                final controller = buildTextController();
+                final field = buildTextField(controller);
                 setState(() {
                   _controllers.add(controller);
                   _fields.add(field);
@@ -116,7 +99,8 @@ class _MyHomePageState extends State<MyHomePage> {
               child: Container(
                 height: 300.0,
               ),
-              painter: WheelPainter(_sliderValues.map((e) => e.toInt()).toList()),
+              painter:
+                  WheelPainter(_sliderValues.map((e) => e.toInt()).toList()),
             ),
             _listView(),
             buildBottomView()
@@ -126,25 +110,25 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-/*
-  void addField() {
-    final controller = TextEditingController();
-    controller.text = areaOfLife;
-    controller.addListener(() => {setState(() {})});
-    final field = TextField(
+  TextEditingController buildTextController([String areaOfLife = ""]) {
+    return TextEditingController()
+      ..text = areaOfLife
+      ..addListener(
+        () => {
+          setState(() {}),
+        },
+      );
+  }
+
+  TextField buildTextField(TextEditingController controller) {
+    return TextField(
       controller: controller,
       decoration: InputDecoration(
         border: OutlineInputBorder(),
         labelText: "some input",
       ),
     );
-
-    print("_controllers = $_controllers");
-    _controllers.add(controller);
-    _fields.add(field);
-    _sliderValues.add(DEFAULT_SEEKER_VALUE);
-
-  }*/
+  }
 
   Widget _listView() {
     return ListView.builder(
@@ -153,7 +137,10 @@ class _MyHomePageState extends State<MyHomePage> {
       itemBuilder: (context, index) {
         return Row(
           children: [
-            SizedBox(width: 300, child: _fields[index]),
+            SizedBox(
+              width: 300,
+              child: _fields[index],
+            ),
             SizedBox(
               width: 300,
               child: FlutterSlider(
@@ -236,43 +223,48 @@ class WheelPainter extends CustomPainter {
 
   WheelPainter(this.values);
 
-  Paint getColoredPaint(Color color) {
-    Paint paint = Paint();
-    paint.color = color;
-    return paint;
+  Paint getPaint(Color color, {bool isStroke = false}) {
+    return Paint()
+      ..color = color
+      ..style = isStroke ? PaintingStyle.stroke : PaintingStyle.fill;
   }
 
   @override
   void paint(Canvas canvas, Size size) {
     double wheelSize = 100;
-    // double nbElem = 6;
-    // double radius = (2 * math.pi) / nbElem;
 
-    final colors = [Colors.purple, Colors.blue, Colors.green, Colors.yellow, Colors.orange];
+    final colors = [
+      Colors.purple,
+      Colors.blue,
+      Colors.green,
+      Colors.yellow,
+      Colors.orange
+    ];
 
     double radius = (2 * math.pi) / values.length;
 
     canvas.drawPath(getWheelPath(wheelSize, 0, radius, values[0] * 10),
-        getColoredPaint(Colors.red));
+        getPaint(Colors.red));
 
     for (var i = 1; i < values.length; i++) {
-
-      canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, values[i] * 10),
-          getColoredPaint(colors[i]));
+      canvas.drawPath(
+          getWheelPath(wheelSize, radius * i, radius, values[i] * 10),
+          getPaint(colors[i]));
+      canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
+          getPaint(colors[i], isStroke: true));
     }
-/*
-    canvas.drawPath(getWheelPath(wheelSize, 0, radius, wheelSize),
-        getColoredPaint(Colors.red));
-    canvas.drawPath(getWheelPath(wheelSize, radius, radius, wheelSize),
-        getColoredPaint(Colors.purple));
-    canvas.drawPath(getWheelPath(wheelSize, radius * 2, radius, wheelSize),
-        getColoredPaint(Colors.blue));
-    canvas.drawPath(getWheelPath(wheelSize, radius * 3, radius, 100),
-        getColoredPaint(Colors.green));
-    canvas.drawPath(getWheelPath(wheelSize, radius * 4, radius, wheelSize),
-        getColoredPaint(Colors.yellow));
-    canvas.drawPath(getWheelPath(wheelSize, radius * 5, radius, 20),
-        getColoredPaint(Colors.orange));*/
+
+    drawGrid(canvas, wheelSize);
+  }
+
+  void drawGrid(Canvas canvas, double wheelSize) {
+    for (var i = 1; i <= 10; i++) {
+      canvas.drawCircle(
+        Offset(wheelSize, wheelSize),
+        wheelSize / 10 * i,
+        getPaint(const Color(0xffaa44aa), isStroke: true),
+      );
+    }
   }
 
   Path getWheelPath(double wheelSize, double fromRadius, double toRadius,

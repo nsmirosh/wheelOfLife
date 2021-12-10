@@ -20,20 +20,35 @@
 
 [ ] - fix the screen overflow issue
 [ ] - make the input for the are of life and the slide for that area half the screen width each
-
-[ ] - limit to a maximum number of life areas?
-
-
-[ ] - code for initialializing inputs - it's duplicated right now
-
+[ ] - make maximum number of life areas - 15
+[ ] - code for initialializing inputs - fix the duplication
 
 ========= DISPLAYING THE WHEEL OF LIFE ==========
 
 [x] - transfer the code from the other project into this
-[ ] - refactor that code to get rid of the constants and develop an API to interact with my inputs
-[ ] - hook up my inputs with the API developed from the wheel
-[ ] - make sure parts of the pie are deleted and added whenever the inputs are deleted and added
+[x] - refactor that code to get rid of the constants and develop an API to interact with my inputs
+[x] - hook up my inputs with the API developed from the wheel
+[x] - make sure parts of the pie are deleted and added whenever the inputs are deleted and added
+[ ] - make sure that you can add up to 15 areas of life
+[ ] - add a grid above the pies to show at what level is the are of life right now
+  [x] - add an empty circle
+  [x] - build 10 empty circles
+  [x] - draw the divider lines between pies
 
+[ ] - draw the circle and make it bigger
+
+[ ] - refactor the code and optimize it
+    [ ] - remove duplication everywhere
+    [ ] - remove magic numbers
+    [ ] - separate stuff into functions
+
+
+[ ] - add the animations for adding and deleting a point
+
+[ ] - add the ability to change the color palette on pre-defined palettes based on the amount of colors
+
+
+[ ] - add a button saying - we have a palette for the x amount of life areas - would you like to try it out? show a list of palettes
 
 ======= ADDING A BANNER ========
 
@@ -46,10 +61,19 @@
 
 
 
+====== ADDING A COOKIE POLICY, PRIVACY POLICY, TERMS AND CONDITIONS  =======
+
 ========= TESTING THE WEB APP ON DIFFERENT SCREEN SIZES INCLUDING MOBILE ==========
 
-
+[ ] - test the app on different browsers
+[ ] - test the app on various size of laptops and phones
 
 ========= DEPLOYING THE APP ==========
 
+[ ] - buy wheelof.life domain name for $3000 in case it's $5000
+
+
+
+
+DEPLOY BEFORE DEC 31ST
 
