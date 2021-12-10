@@ -82,17 +82,9 @@ class _MyHomePageState extends State<MyHomePage> {
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-
-              CustomPaint(
-                child: Container(
-                  height: 300.0,
-                  width: MediaQuery.of(context).size.width,
-                ),
-                painter:
-                    WheelPainter(_sliderValues.map((e) => e.toInt()).toList()),
-              ),
-              _listView(),
-              addAnotherAreaButton()
+              buildTheWheel(),
+              buildInputs(),
+              buildAddAreaButton()
             ],
           ),
         ],
@@ -100,7 +92,17 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget addAnotherAreaButton() {
+  Widget buildTheWheel() {
+    return CustomPaint(
+      child: Container(
+        height: 300.0,
+        width: MediaQuery.of(context).size.width,
+      ),
+      painter: WheelPainter(_sliderValues.map((e) => e.toInt()).toList()),
+    );
+  }
+
+  Widget buildAddAreaButton() {
     return TextButton(
       onPressed: () {
         final controller = buildTextController();
@@ -138,7 +140,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  Widget _listView() {
+  Widget buildInputs() {
     return ListView.builder(
       shrinkWrap: true,
       itemCount: _fields.length,
@@ -213,7 +215,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  /*Widget buildBottomView() {
+/*Widget buildBottomView() {
     return Column(
       children: List.generate(
         _controllers.length,
