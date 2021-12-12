@@ -100,7 +100,7 @@ class _MyHomePageState extends State<MyHomePage> {
         height: 300.0,
         width: MediaQuery.of(context).size.width,
       ),
-      painter: WheelPainter(_sliderValues.map((e) => e.toInt()).toList()),
+      painter: WheelPainter(_sliderValues.map((e) => e.toInt()).toList(), colors),
     );
   }
 
@@ -231,8 +231,9 @@ class _MyHomePageState extends State<MyHomePage> {
 
 class WheelPainter extends CustomPainter {
   List<int> values = [];
+  List<Color> colors = [];
 
-  WheelPainter(this.values);
+  WheelPainter(this.values, this.colors);
 
   Paint getPaint(Color color, {bool isStroke = false}) {
     return Paint()
@@ -243,14 +244,6 @@ class WheelPainter extends CustomPainter {
   @override
   void paint(Canvas canvas, Size size) {
     double wheelSize = 100;
-
-    final colors = [
-      Colors.purple,
-      Colors.blue,
-      Colors.green,
-      Colors.yellow,
-      Colors.orange
-    ];
 
     final palette1 = [
       Color(0xffeae4e9),
@@ -267,12 +260,12 @@ class WheelPainter extends CustomPainter {
     double radius = (2 * math.pi) / values.length;
 
     canvas.drawPath(getWheelPath(wheelSize, 0, radius, values[0] * 10),
-        getPaint(palette1[0]));
+        getPaint(colors[0]));
 
     for (var i = 1; i < values.length; i++) {
       canvas.drawPath(
           getWheelPath(wheelSize, radius * i, radius, values[i] * 10),
-          getPaint(palette1[i]));
+          getPaint(colors[i]));
       canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
           getPaint(const Color(0xffaa44aa), isStroke: true));
     }
