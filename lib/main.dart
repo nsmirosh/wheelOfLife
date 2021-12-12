@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'dart:math' as math;
 
@@ -46,9 +47,10 @@ class _MyHomePageState extends State<MyHomePage> {
     // "Spirituality",
   ];
 
-  var areasOfLife = 1;
   final DEFAULT_SEEKER_VALUE = 7.0;
   final MINIMUM_AMOUNT_OF_LIFE_AREAS = 2;
+
+  List<Color> colors = [Colors.black, Colors.black, Colors.black, Colors.black];
 
   @override
   void initState() {
@@ -140,6 +142,12 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+  void changeColor(Color color, int index) {
+    setState(() => colors[index] = color);
+  }
+
+  List<Color> currentColors = [Colors.yellow, Colors.green];
+
   Widget buildInputs() {
     return ListView.builder(
       shrinkWrap: true,
@@ -163,6 +171,11 @@ class _MyHomePageState extends State<MyHomePage> {
                   });
                 },
               ),
+            ),
+            ColorPicker(
+              pickerColor: colors[index],
+              onColorChanged: (Color color) => changeColor(color, index),
+              colorPickerWidth: 100,
             ),
             TextButton(
               onPressed: () {
@@ -214,18 +227,6 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
-
-/*Widget buildBottomView() {
-    return Column(
-      children: List.generate(
-        _controllers.length,
-        (index) => Text(
-          "area of life = ${_controllers[index].text}, value = ${_sliderValues[index]}",
-          style: const TextStyle(color: Colors.amber),
-        ),
-      ),
-    );
-  }*/
 }
 
 class WheelPainter extends CustomPainter {
@@ -251,17 +252,29 @@ class WheelPainter extends CustomPainter {
       Colors.orange
     ];
 
+    final palette1 = [
+      Color(0xffeae4e9),
+      Color(0xfffff1e6),
+      Color(0xfffde2e4),
+      Color(0xfffad2e1),
+      Color(0xffe2ece9),
+      Color(0xffbee1e6),
+      Color(0xfff0efeb),
+      Color(0xffdfe7fd),
+      Color(0xffcddafd),
+    ];
+
     double radius = (2 * math.pi) / values.length;
 
     canvas.drawPath(getWheelPath(wheelSize, 0, radius, values[0] * 10),
-        getPaint(Colors.red));
+        getPaint(palette1[0]));
 
     for (var i = 1; i < values.length; i++) {
       canvas.drawPath(
           getWheelPath(wheelSize, radius * i, radius, values[i] * 10),
-          getPaint(colors[i]));
+          getPaint(palette1[i]));
       canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
-          getPaint(colors[i], isStroke: true));
+          getPaint(const Color(0xffaa44aa), isStroke: true));
     }
 
     drawGrid(canvas, wheelSize);
