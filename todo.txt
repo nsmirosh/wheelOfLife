@@ -42,6 +42,8 @@
   [ ] - next to it write the description of what it is
   [ ] - write the value
 
+[ ] - implement recommended palettes
+
 [ ] - refactor the code and optimize it
     [ ] - remove duplication everywhere
     [ ] - remove magic numbers

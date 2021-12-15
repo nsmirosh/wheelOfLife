@@ -41,16 +41,25 @@ class _MyHomePageState extends State<MyHomePage> {
     "Money",
     "Career / Business",
     "Social / Friends",
-    // "Love, Family, Kids",
-    // "Personal Growth",
-    // "Fun",
-    // "Spirituality",
+    "Love, Family, Kids",
+    "Personal Growth",
+    "Fun",
+    "Spirituality",
   ];
 
   final DEFAULT_SEEKER_VALUE = 7.0;
   final MINIMUM_AMOUNT_OF_LIFE_AREAS = 2;
 
-  List<Color> colors = [Colors.black, Colors.black, Colors.black, Colors.black];
+  final colors = [
+    Color(0xffeae4e9),
+    Color(0xfffff1e6),
+    Color(0xfffde2e4),
+    Color(0xfffad2e1),
+    Color(0xffe2ece9),
+    Color(0xffbee1e6),
+    Color(0xffdfe7fd),
+    Color(0xffcddafd),
+  ];
 
   @override
   void initState() {
@@ -138,8 +147,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return TextField(
       controller: controller,
       decoration: InputDecoration(
-        border: OutlineInputBorder(),
-        labelText: "some input",
+        border: OutlineInputBorder()
       ),
     );
   }
@@ -240,11 +248,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
-            /*ColorPicker(
-              pickerColor: colors[index],
-              onColorChanged: (Color color) => changeColor(color, index),
-              colorPickerWidth: 100,
-            ),*/
             TextButton(
               onPressed: () {
                 showSomeDialog(index);
@@ -323,17 +326,7 @@ class WheelPainter extends CustomPainter {
     double wheelSize = 200;
     int totalPossibleGrades = 10;
 
-    final palette1 = [
-      Color(0xffeae4e9),
-      Color(0xfffff1e6),
-      Color(0xfffde2e4),
-      Color(0xfffad2e1),
-      Color(0xffe2ece9),
-      Color(0xffbee1e6),
-      Color(0xfff0efeb),
-      Color(0xffdfe7fd),
-      Color(0xffcddafd),
-    ];
+
 
     double radius = (2 * math.pi) / values.length;
 
@@ -345,7 +338,7 @@ class WheelPainter extends CustomPainter {
           getWheelPath(wheelSize, radius * i, radius, values[i] * wheelSize / totalPossibleGrades),
           getPaint(colors[i]));
       canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
-          getPaint(const Color(0xffaa44aa), isStroke: true));
+          getPaint(Colors.black, isStroke: true));
     }
 
     drawGrid(canvas, wheelSize);
@@ -356,7 +349,7 @@ class WheelPainter extends CustomPainter {
       canvas.drawCircle(
         Offset(wheelSize, wheelSize),
         wheelSize / 10 * i,
-        getPaint(const Color(0xffaa44aa), isStroke: true),
+        getPaint(Colors.black, isStroke: true),
       );
     }
   }
