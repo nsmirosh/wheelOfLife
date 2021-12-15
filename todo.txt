@@ -35,18 +35,25 @@
   [x] - build 10 empty circles
   [x] - draw the divider lines between pies
 
-[ ] - center the circle
-[ ] - make the circle bigger
-[ ] - show the text near each area of life
+[x] - center the circle
+[x] - make the circle bigger
+[ ] - draw a legend near the circle (for the first version of the circle of life)
+  [ ] - draw a color in a circle
+  [ ] - next to it write the description of what it is
+  [ ] - write the value
 
 [ ] - refactor the code and optimize it
     [ ] - remove duplication everywhere
     [ ] - remove magic numbers
     [ ] - separate stuff into functions
 
+[ ] - implement color choosing in a dialog
+
 [ ] - add the animations for adding and deleting a point in the circle
 [ ] - add the ability to change the color palette on pre-defined palettes based on the amount of colors
 [ ] - add a button saying - we have a palette for the x amount of life areas - would you like to try it out? show a list of palettes
+
+[ ] - make the seekbar on the color scrollable straight away without touching the heat map
 
 ======= ADDING A BANNER ========
 
@@ -58,8 +65,8 @@
 ====== ADDING AN INTERSTITIAL AD DURING EXPORT ========
 
 
+====== ADDING A GDPR/COOKIE POLICY, PRIVACY POLICY, TERMS AND CONDITIONS  =======
 
-====== ADDING A COOKIE POLICY, PRIVACY POLICY, TERMS AND CONDITIONS  =======
 
 ========= TESTING THE WEB APP ON DIFFERENT SCREEN SIZES INCLUDING MOBILE ==========
 

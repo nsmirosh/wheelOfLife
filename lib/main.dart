@@ -95,12 +95,14 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildTheWheel() {
-    return CustomPaint(
-      child: Container(
-        height: 300.0,
-        width: MediaQuery.of(context).size.width,
+    return Center(
+      child: CustomPaint(
+        child: Container(
+          height: 500.0,
+          width: 500.0 //TODO figure this out - I don't understand the width here
+        ),
+        painter: WheelPainter(_sliderValues.map((e) => e.toInt()).toList(), colors),
       ),
-      painter: WheelPainter(_sliderValues.map((e) => e.toInt()).toList(), colors),
     );
   }
 
@@ -148,6 +150,72 @@ class _MyHomePageState extends State<MyHomePage> {
 
   List<Color> currentColors = [Colors.yellow, Colors.green];
 
+  void showSomeDialog(int index) {
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          scrollable: true,
+          titlePadding: const EdgeInsets.all(0),
+          contentPadding: const EdgeInsets.all(0),
+          content: Column(
+            children: [
+              ColorPicker(
+                pickerColor: const Color(0xffeae4e9),
+                onColorChanged: (Color color) => changeColor(color, index),
+                colorPickerWidth: 300,
+                pickerAreaHeightPercent: 0.7,
+                enableAlpha: true, // hexInputController will respect it too.
+                displayThumbColor: true,
+                paletteType: PaletteType.hsvWithHue,
+                labelTypes: const [],
+                pickerAreaBorderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(2),
+                  topRight: Radius.circular(2),
+                ),
+                // hexInputController: textController, // <- here
+                portraitOnly: true,
+              ),
+/*              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+                *//* It can be any text field, for example:
+
+                            * TextField
+                            * TextFormField
+                            * CupertinoTextField
+                            * EditableText
+                            * any text field from 3-rd party package
+                            * your own text field
+
+                            so basically anything that supports/uses
+                            a TextEditingController for an editable text.
+                            *//*
+                child: CupertinoTextField(
+                  controller: textController,
+                  // Everything below is purely optional.
+                  prefix: const Padding(padding: EdgeInsets.only(left: 8), child: Icon(Icons.tag)),
+                  suffix: IconButton(
+                    icon: const Icon(Icons.content_paste_rounded),
+                    onPressed: () => copyToClipboard(textController.text),
+                  ),
+                  autofocus: true,
+                  maxLength: 9,
+                  inputFormatters: [
+                    // Any custom input formatter can be passed
+                    // here or use any Form validator you want.
+                    UpperCaseTextFormatter(),
+                    FilteringTextInputFormatter.allow(RegExp(kValidHexPattern)),
+                  ],
+                ),
+              )*/
+            ],
+          ),
+        );
+      },
+    );
+  }
+
   Widget buildInputs() {
     return ListView.builder(
       shrinkWrap: true,
@@ -172,10 +240,19 @@ class _MyHomePageState extends State<MyHomePage> {
                 },
               ),
             ),
-            ColorPicker(
+            /*ColorPicker(
               pickerColor: colors[index],
               onColorChanged: (Color color) => changeColor(color, index),
               colorPickerWidth: 100,
+            ),*/
+            TextButton(
+              onPressed: () {
+                showSomeDialog(index);
+              },
+              child: Text(
+                "choose color",
+                style: TextStyle(color: Colors.blueAccent),
+              ),
             ),
             TextButton(
               onPressed: () {
@@ -243,7 +320,8 @@ class WheelPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double wheelSize = 100;
+    double wheelSize = 200;
+    int totalPossibleGrades = 10;
 
     final palette1 = [
       Color(0xffeae4e9),
@@ -259,12 +337,12 @@ class WheelPainter extends CustomPainter {
 
     double radius = (2 * math.pi) / values.length;
 
-    canvas.drawPath(getWheelPath(wheelSize, 0, radius, values[0] * 10),
+    canvas.drawPath(getWheelPath(wheelSize, 0, radius, values[0] * wheelSize / totalPossibleGrades),
         getPaint(colors[0]));
 
     for (var i = 1; i < values.length; i++) {
       canvas.drawPath(
-          getWheelPath(wheelSize, radius * i, radius, values[i] * 10),
+          getWheelPath(wheelSize, radius * i, radius, values[i] * wheelSize / totalPossibleGrades),
           getPaint(colors[i]));
       canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
           getPaint(const Color(0xffaa44aa), isStroke: true));
