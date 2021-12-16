@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
-import 'dart:math' as math;
+import 'package:wheeloflife/wheel.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,7 +10,6 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -37,20 +36,17 @@ class _MyHomePageState extends State<MyHomePage> {
   final List<TextField> _fields = [];
   final List<double> _sliderValues = [];
   final List<String> _initialAreasOfLife = [
-    "Health & Fitness",
-    "Money",
-    "Career / Business",
+    "Health",
+    "Career & Money",
     "Social / Friends",
     "Love, Family, Kids",
-    "Personal Growth",
-    "Fun",
-    "Spirituality",
+    "Personal Growth"
   ];
 
   final DEFAULT_SEEKER_VALUE = 7.0;
   final MINIMUM_AMOUNT_OF_LIFE_AREAS = 2;
 
-  final colors = [
+ /* final colors = [
     Color(0xffeae4e9),
     Color(0xfffff1e6),
     Color(0xfffde2e4),
@@ -59,6 +55,15 @@ class _MyHomePageState extends State<MyHomePage> {
     Color(0xffbee1e6),
     Color(0xffdfe7fd),
     Color(0xffcddafd),
+  ];*/
+
+  //264653,2a9d8f,e9c46a,f4a261,e76f51
+  final colors = [
+    Color(0xff264653),
+    Color(0xff2a9d8f),
+    Color(0xffe9c46a),
+    Color(0xfff4a261),
+    Color(0xffe76f51),
   ];
 
   @override
@@ -89,16 +94,47 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ListView(
-        children: [
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              buildTheWheel(),
-              buildInputs(),
-              buildAddAreaButton()
-            ],
+        scrollDirection: Axis.vertical,
+        children: <Widget>[
+          Row(
+            children: [buildTheWheel(), buildLegend()],
           ),
+          buildInputs(),
+          buildAddAreaButton()
         ],
+      ),
+    );
+  }
+
+  Widget buildLegend() {
+    return SizedBox(
+      height: 400,
+      width: 300,
+      child: ListView.builder(
+        scrollDirection: Axis.vertical,
+        itemCount: _controllers.length,
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(top: 10),
+            child: Row(
+              children: [
+                Container(
+                  width: 50.0,
+                  height: 50.0,
+                  decoration: new BoxDecoration(
+                    color: colors[index],
+                    shape: BoxShape.circle,
+                  ),
+                ),
+                Padding(
+                  padding: const EdgeInsets.only(left: 30),
+                  child: Text(_controllers[index].text),
+                ),
+                Text(" == ${_sliderValues[index].toInt()}")
+              ],
+            ),
+          );
+        },
       ),
     );
   }
@@ -107,10 +143,12 @@ class _MyHomePageState extends State<MyHomePage> {
     return Center(
       child: CustomPaint(
         child: Container(
-          height: 500.0,
-          width: 500.0 //TODO figure this out - I don't understand the width here
-        ),
-        painter: WheelPainter(_sliderValues.map((e) => e.toInt()).toList(), colors),
+            height: 500.0,
+            width:
+                500.0 //TODO figure this out - I don't understand the width here
+            ),
+        painter:
+            WheelPainter(_sliderValues.map((e) => e.toInt()).toList(), colors),
       ),
     );
   }
@@ -146,9 +184,7 @@ class _MyHomePageState extends State<MyHomePage> {
   TextField buildTextField(TextEditingController controller) {
     return TextField(
       controller: controller,
-      decoration: InputDecoration(
-        border: OutlineInputBorder()
-      ),
+      decoration: InputDecoration(border: OutlineInputBorder()),
     );
   }
 
@@ -159,7 +195,6 @@ class _MyHomePageState extends State<MyHomePage> {
   List<Color> currentColors = [Colors.yellow, Colors.green];
 
   void showSomeDialog(int index) {
-
     showDialog(
       context: context,
       builder: (BuildContext context) {
@@ -174,7 +209,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 onColorChanged: (Color color) => changeColor(color, index),
                 colorPickerWidth: 300,
                 pickerAreaHeightPercent: 0.7,
-                enableAlpha: true, // hexInputController will respect it too.
+                enableAlpha: true,
+                // hexInputController will respect it too.
                 displayThumbColor: true,
                 paletteType: PaletteType.hsvWithHue,
                 labelTypes: const [],
@@ -185,38 +221,6 @@ class _MyHomePageState extends State<MyHomePage> {
                 // hexInputController: textController, // <- here
                 portraitOnly: true,
               ),
-/*              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-                *//* It can be any text field, for example:
-
-                            * TextField
-                            * TextFormField
-                            * CupertinoTextField
-                            * EditableText
-                            * any text field from 3-rd party package
-                            * your own text field
-
-                            so basically anything that supports/uses
-                            a TextEditingController for an editable text.
-                            *//*
-                child: CupertinoTextField(
-                  controller: textController,
-                  // Everything below is purely optional.
-                  prefix: const Padding(padding: EdgeInsets.only(left: 8), child: Icon(Icons.tag)),
-                  suffix: IconButton(
-                    icon: const Icon(Icons.content_paste_rounded),
-                    onPressed: () => copyToClipboard(textController.text),
-                  ),
-                  autofocus: true,
-                  maxLength: 9,
-                  inputFormatters: [
-                    // Any custom input formatter can be passed
-                    // here or use any Form validator you want.
-                    UpperCaseTextFormatter(),
-                    FilteringTextInputFormatter.allow(RegExp(kValidHexPattern)),
-                  ],
-                ),
-              )*/
             ],
           ),
         );
@@ -306,69 +310,5 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
-  }
-}
-
-class WheelPainter extends CustomPainter {
-  List<int> values = [];
-  List<Color> colors = [];
-
-  WheelPainter(this.values, this.colors);
-
-  Paint getPaint(Color color, {bool isStroke = false}) {
-    return Paint()
-      ..color = color
-      ..style = isStroke ? PaintingStyle.stroke : PaintingStyle.fill;
-  }
-
-  @override
-  void paint(Canvas canvas, Size size) {
-    double wheelSize = 200;
-    int totalPossibleGrades = 10;
-
-
-
-    double radius = (2 * math.pi) / values.length;
-
-    canvas.drawPath(getWheelPath(wheelSize, 0, radius, values[0] * wheelSize / totalPossibleGrades),
-        getPaint(colors[0]));
-
-    for (var i = 1; i < values.length; i++) {
-      canvas.drawPath(
-          getWheelPath(wheelSize, radius * i, radius, values[i] * wheelSize / totalPossibleGrades),
-          getPaint(colors[i]));
-      canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
-          getPaint(Colors.black, isStroke: true));
-    }
-
-    drawGrid(canvas, wheelSize);
-  }
-
-  void drawGrid(Canvas canvas, double wheelSize) {
-    for (var i = 1; i <= 10; i++) {
-      canvas.drawCircle(
-        Offset(wheelSize, wheelSize),
-        wheelSize / 10 * i,
-        getPaint(Colors.black, isStroke: true),
-      );
-    }
-  }
-
-  Path getWheelPath(double wheelSize, double fromRadius, double toRadius,
-      double sizeOfRadius) {
-    return Path()
-      ..moveTo(wheelSize, wheelSize)
-      ..arcTo(
-          Rect.fromCircle(
-              radius: sizeOfRadius, center: Offset(wheelSize, wheelSize)),
-          fromRadius,
-          toRadius,
-          false)
-      ..close();
-  }
-
-  @override
-  bool shouldRepaint(CustomPainter oldDelegate) {
-    return oldDelegate != this;
   }
 }
