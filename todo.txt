@@ -47,10 +47,11 @@
 [ ] - make maximum number of life areas - 20
 
 
-======= ADDING A BANNER ========
-
 
 ========= EXPORTING THE RESULTS ==========
+
+
+======= ADDING A BANNER ========
 
 
 ====== ADDING AN INTERSTITIAL AD DURING EXPORT ========

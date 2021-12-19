@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:wheeloflife/wheel.dart';
+import 'package:wheeloflife/colors.dart';
 
 void main() {
   runApp(const MyApp());
@@ -48,25 +49,11 @@ class _MyHomePageState extends State<MyHomePage> {
   final DEFAULT_SEEKER_VALUE = 7.0;
   final MINIMUM_AMOUNT_OF_LIFE_AREAS = 2;
 
-  /* final colors = [
-    Color(0xffeae4e9),
-    Color(0xfffff1e6),
-    Color(0xfffde2e4),
-    Color(0xfffad2e1),
-    Color(0xffe2ece9),
-    Color(0xffbee1e6),
-    Color(0xffdfe7fd),
-    Color(0xffcddafd),
-  ];*/
 
-  //264653,2a9d8f,e9c46a,f4a261,e76f51
-  final colors = [
-    Color(0xff264653),
-    Color(0xff2a9d8f),
-    Color(0xffe9c46a),
-    Color(0xfff4a261),
-    Color(0xffe76f51),
-  ];
+
+
+
+  late List<Color> colors;
 
   late Color colorToApply;
   final textController = TextEditingController();
@@ -74,6 +61,8 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
+    palette4.shuffle();
+    colors = List.generate(palette4.length, (index) => Color(int.parse("0xff${palette4[index]}")));
 
     for (var areaOfLife in _initialAreasOfLife) {
       final controller = buildTextController(areaOfLife);
