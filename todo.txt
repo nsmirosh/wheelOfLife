@@ -40,8 +40,8 @@
   [x] - write the value
 
 [x] - implement color choosing in a dialog
-  [ ] - change the color only after OK is pressed
-  [ ] - add the HEX input controller to be able to input HEX codes for colors - see the color picker example
+  [x] - change the color only after OK is pressed
+  [x] - add the HEX input controller to be able to input HEX codes for colors - see the color picker example
   [ ] - implement the ability to go back to previous color
 
 [ ] - make maximum number of life areas - 20

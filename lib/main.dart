@@ -1,4 +1,6 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:wheeloflife/wheel.dart';
@@ -46,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
   final DEFAULT_SEEKER_VALUE = 7.0;
   final MINIMUM_AMOUNT_OF_LIFE_AREAS = 2;
 
- /* final colors = [
+  /* final colors = [
     Color(0xffeae4e9),
     Color(0xfffff1e6),
     Color(0xfffde2e4),
@@ -65,6 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
     Color(0xfff4a261),
     Color(0xffe76f51),
   ];
+
+  late Color colorToApply;
+  final textController = TextEditingController();
 
   @override
   void initState() {
@@ -188,24 +193,42 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
+
+
+
   void changeColor(Color color, int index) {
-    setState(() => colors[index] = color);
+    colorToApply = color;
   }
 
   List<Color> currentColors = [Colors.yellow, Colors.green];
 
-  void showSomeDialog(int index) {
+  void showChooseColorDialog(int index) {
     showDialog(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
           scrollable: true,
+          actions: [
+            TextButton(
+              child: Text("Cancel"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+            TextButton(
+              child: Text("OK"),
+              onPressed: () {
+                Navigator.of(context).pop();
+                setState(() => colors[index] = colorToApply);
+              },
+            ),
+          ],
           titlePadding: const EdgeInsets.all(0),
           contentPadding: const EdgeInsets.all(0),
           content: Column(
             children: [
               ColorPicker(
-                pickerColor: const Color(0xffeae4e9),
+                pickerColor: colors[index],
                 onColorChanged: (Color color) => changeColor(color, index),
                 colorPickerWidth: 300,
                 pickerAreaHeightPercent: 0.7,
@@ -218,9 +241,26 @@ class _MyHomePageState extends State<MyHomePage> {
                   topLeft: Radius.circular(2),
                   topRight: Radius.circular(2),
                 ),
-                // hexInputController: textController, // <- here
+                 hexInputController: textController, // <- here
                 portraitOnly: true,
               ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+
+                child: CupertinoTextField(
+                  controller: textController,
+                  // Everything below is purely optional.
+                  prefix: const Padding(padding: EdgeInsets.only(left: 8), child: Icon(Icons.tag)),
+                  autofocus: true,
+                  maxLength: 9,
+                  inputFormatters: [
+                    // Any custom input formatter can be passed
+                    // here or use any Form validator you want.
+                    UpperCaseTextFormatter(),
+                    FilteringTextInputFormatter.allow(RegExp(kValidHexPattern)),
+                  ],
+                ),
+              )
             ],
           ),
         );
@@ -245,7 +285,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 values: [_sliderValues[index].toDouble()],
                 max: 10,
                 min: 0,
-                onDragCompleted: (handlerIndex, lowerValue, upperValue) {
+                onDragging: (handlerIndex, lowerValue, upperValue) {
                   setState(() {
                     _sliderValues[index] = lowerValue.toDouble();
                   });
@@ -254,7 +294,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             TextButton(
               onPressed: () {
-                showSomeDialog(index);
+                showChooseColorDialog(index);
               },
               child: Text(
                 "choose color",
