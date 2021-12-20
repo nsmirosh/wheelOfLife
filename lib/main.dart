@@ -1,10 +1,17 @@
+import 'dart:typed_data';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:wheeloflife/wheel.dart';
 import 'package:wheeloflife/colors.dart';
+import 'dart:ui' as ui;
+import 'package:wheeloflife/assets/constants.dart' as Constants;
+
+import 'dialogs/dialogs.dart';
 
 void main() {
   runApp(const MyApp());
@@ -46,17 +53,10 @@ class _MyHomePageState extends State<MyHomePage> {
     "Personal Growth"
   ];
 
-  final DEFAULT_SEEKER_VALUE = 7.0;
-  final MINIMUM_AMOUNT_OF_LIFE_AREAS = 2;
-
-
-
-
-
   late List<Color> colors;
-
   late Color colorToApply;
-  final textController = TextEditingController();
+  final hexInputTextController = TextEditingController();
+
 
   @override
   void initState() {
@@ -69,7 +69,7 @@ class _MyHomePageState extends State<MyHomePage> {
       final field = buildTextField(controller);
       _controllers.add(controller);
       _fields.add(field);
-      _sliderValues.add(DEFAULT_SEEKER_VALUE);
+      _sliderValues.add(Constants.DEFAULT_SEEKER_VALUE);
     }
   }
 
@@ -155,7 +155,7 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {
           _controllers.add(controller);
           _fields.add(field);
-          _sliderValues.add(DEFAULT_SEEKER_VALUE);
+          _sliderValues.add(Constants.DEFAULT_SEEKER_VALUE);
         });
       },
       child: const Text(
@@ -182,78 +182,58 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-
-
-
   void changeColor(Color color, int index) {
     colorToApply = color;
   }
 
   List<Color> currentColors = [Colors.yellow, Colors.green];
 
-  void showChooseColorDialog(int index) {
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          scrollable: true,
-          actions: [
-            TextButton(
-              child: Text("Cancel"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-            TextButton(
-              child: Text("OK"),
-              onPressed: () {
-                Navigator.of(context).pop();
-                setState(() => colors[index] = colorToApply);
-              },
-            ),
-          ],
-          titlePadding: const EdgeInsets.all(0),
-          contentPadding: const EdgeInsets.all(0),
-          content: Column(
-            children: [
-              ColorPicker(
-                pickerColor: colors[index],
-                onColorChanged: (Color color) => changeColor(color, index),
-                colorPickerWidth: 300,
-                pickerAreaHeightPercent: 0.7,
-                enableAlpha: true,
-                // hexInputController will respect it too.
-                displayThumbColor: true,
-                paletteType: PaletteType.hsvWithHue,
-                labelTypes: const [],
-                pickerAreaBorderRadius: const BorderRadius.only(
-                  topLeft: Radius.circular(2),
-                  topRight: Radius.circular(2),
-                ),
-                 hexInputController: textController, // <- here
-                portraitOnly: true,
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
 
-                child: CupertinoTextField(
-                  controller: textController,
-                  // Everything below is purely optional.
-                  prefix: const Padding(padding: EdgeInsets.only(left: 8), child: Icon(Icons.tag)),
-                  autofocus: true,
-                  maxLength: 9,
-                  inputFormatters: [
-                    // Any custom input formatter can be passed
-                    // here or use any Form validator you want.
-                    UpperCaseTextFormatter(),
-                    FilteringTextInputFormatter.allow(RegExp(kValidHexPattern)),
-                  ],
-                ),
-              )
+  void onColorChosen(BuildContext context, int index) {
+    Navigator.of(context).pop();
+    setState(() => colors[index] = colorToApply);
+  }
+
+  Widget buildColorPicker(int index) {
+    return Column(
+      children: [
+        ColorPicker(
+          pickerColor: colors[index],
+          onColorChanged: (Color color) => changeColor(color, index),
+          colorPickerWidth: 300,
+          pickerAreaHeightPercent: 0.7,
+          enableAlpha: true,
+          // hexInputController will respect it too.
+          displayThumbColor: true,
+          paletteType: PaletteType.hsvWithHue,
+          labelTypes: const [],
+          pickerAreaBorderRadius: const BorderRadius.only(
+            topLeft: Radius.circular(2),
+            topRight: Radius.circular(2),
+          ),
+          hexInputController: hexInputTextController,
+          // <- here
+          portraitOnly: true,
+        ),
+        Padding(
+          padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
+
+          child: CupertinoTextField(
+            controller: hexInputTextController,
+            // Everything below is purely optional.
+            prefix: const Padding(
+                padding: EdgeInsets.only(left: 8), child: Icon(Icons.tag)),
+            autofocus: true,
+            maxLength: 9,
+            inputFormatters: [
+              // Any custom input formatter can be passed
+              // here or use any Form validator you want.
+              UpperCaseTextFormatter(),
+              FilteringTextInputFormatter.allow(RegExp(kValidHexPattern)),
             ],
           ),
-        );
-      },
+        )
+      ],
     );
   }
 
@@ -283,7 +263,7 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             TextButton(
               onPressed: () {
-                showChooseColorDialog(index);
+                showChooseColorDialog(context, index, onColorChosen, buildColorPicker(index));
               },
               child: Text(
                 "choose color",
@@ -293,12 +273,12 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  if (_controllers.length > MINIMUM_AMOUNT_OF_LIFE_AREAS) {
+                  if (_controllers.length > Constants.MINIMUM_AMOUNT_OF_LIFE_AREAS) {
                     _sliderValues.remove(_sliderValues[index]);
                     _controllers.remove(_controllers[index]);
                     _fields.remove(_fields[index]);
                   } else {
-                    _showMyDialog();
+                    showMinLifeAreasDialog(context);
                   }
                 });
               },
@@ -311,33 +291,34 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+
+
   }
 
-  Future<void> _showMyDialog() async {
-    return showDialog<void>(
-      context: context,
-      barrierDismissible: false, // user must tap button!
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Sorry'),
-          content: SingleChildScrollView(
-            child: ListBody(
-              children: const <Widget>[
-                Text(
-                    'You have to have at least 2 life areas in your wheel :) '),
-              ],
-            ),
-          ),
-          actions: <Widget>[
-            TextButton(
-              child: const Text('OK'),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+
+  /*bool inside = false;
+  Uint8List imageInMemory;
+
+  Future<Uint8List> _capturePng() async {
+    try {
+      print('inside');
+      inside = true;
+      RenderRepaintBoundary boundary = _globalKey.currentContext.findRenderObject();
+      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
+      ByteData byteData =
+      await image.toByteData(format: ui.ImageByteFormat.png);
+      Uint8List pngBytes = byteData.buffer.asUint8List();
+//      String bs64 = base64Encode(pngBytes);
+//      print(pngBytes);
+//      print(bs64);
+      print('png done');
+      setState(() {
+        imageInMemory = pngBytes;
+        inside = false;
+      });
+      return pngBytes;
+    } catch (e) {
+      print(e);
+    }
+  }*/
 }

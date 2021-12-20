@@ -47,7 +47,6 @@
 [ ] - make maximum number of life areas - 20
 
 
-
 ========= EXPORTING THE RESULTS ==========
 
 
