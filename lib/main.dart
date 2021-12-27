@@ -6,10 +6,12 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
+import 'package:wheeloflife/utils.dart';
 import 'package:wheeloflife/wheel.dart';
-import 'package:wheeloflife/colors.dart';
+import 'package:wheeloflife/assets/colors.dart';
 import 'dart:ui' as ui;
 import 'package:wheeloflife/assets/constants.dart' as Constants;
+import 'package:wheeloflife/widgets/widget_to_image.dart';
 
 import 'dialogs/dialogs.dart';
 
@@ -42,6 +44,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  late GlobalKey key1;
+
   final List<TextEditingController> _controllers = [];
   final List<TextField> _fields = [];
   final List<double> _sliderValues = [];
@@ -57,12 +61,14 @@ class _MyHomePageState extends State<MyHomePage> {
   late Color colorToApply;
   final hexInputTextController = TextEditingController();
 
+  Uint8List? bytes;
 
   @override
   void initState() {
     super.initState();
     palette4.shuffle();
-    colors = List.generate(palette4.length, (index) => Color(int.parse("0xff${palette4[index]}")));
+    colors = List.generate(
+        palette4.length, (index) => Color(int.parse("0xff${palette4[index]}")));
 
     for (var areaOfLife in _initialAreasOfLife) {
       final controller = buildTextController(areaOfLife);
@@ -87,18 +93,43 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: ListView(
-        scrollDirection: Axis.vertical,
-        children: <Widget>[
-          Row(
-            children: [buildTheWheel(), buildLegend()],
-          ),
-          buildInputs(),
-          buildAddAreaButton()
-        ],
-      ),
+      body: buildTheUI(),
     );
   }
+
+  void onSavePressed() {}
+
+  Widget buildTheUI() {
+    return ListView(
+      scrollDirection: Axis.vertical,
+      children: <Widget>[
+        Row(
+          children: [
+            WidgetToImage(builder: (key) {
+              key1 = key;
+
+              return buildTheWheel();
+            }),
+            buildLegend(),
+          ],
+        ),
+        TextButton(
+          onPressed: () async {
+            final resultBytes = await Utils.capture(key1);
+            setState(() {
+              bytes = resultBytes;
+            });
+          },
+          child: const Text("save"),
+        ),
+        buildInputs(),
+        buildAddAreaButton(),
+        buildImage(bytes),
+      ],
+    );
+  }
+
+  Widget buildImage(Uint8List? bytes) => bytes != null ? Image.memory(bytes) : Container();
 
   Widget buildLegend() {
     return SizedBox(
@@ -178,7 +209,7 @@ class _MyHomePageState extends State<MyHomePage> {
   TextField buildTextField(TextEditingController controller) {
     return TextField(
       controller: controller,
-      decoration: InputDecoration(border: OutlineInputBorder()),
+      decoration: InputDecoration(border: const OutlineInputBorder()),
     );
   }
 
@@ -187,7 +218,6 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   List<Color> currentColors = [Colors.yellow, Colors.green];
-
 
   void onColorChosen(BuildContext context, int index) {
     Navigator.of(context).pop();
@@ -217,7 +247,6 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         Padding(
           padding: const EdgeInsets.fromLTRB(16, 0, 16, 16),
-
           child: CupertinoTextField(
             controller: hexInputTextController,
             // Everything below is purely optional.
@@ -263,7 +292,8 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             TextButton(
               onPressed: () {
-                showChooseColorDialog(context, index, onColorChosen, buildColorPicker(index));
+                showChooseColorDialog(
+                    context, index, onColorChosen, buildColorPicker(index));
               },
               child: Text(
                 "choose color",
@@ -273,7 +303,8 @@ class _MyHomePageState extends State<MyHomePage> {
             TextButton(
               onPressed: () {
                 setState(() {
-                  if (_controllers.length > Constants.MINIMUM_AMOUNT_OF_LIFE_AREAS) {
+                  if (_controllers.length >
+                      Constants.MINIMUM_AMOUNT_OF_LIFE_AREAS) {
                     _sliderValues.remove(_sliderValues[index]);
                     _controllers.remove(_controllers[index]);
                     _fields.remove(_fields[index]);
@@ -291,15 +322,12 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
-
-
   }
 
+  bool inside = false;
+  late Uint8List imageInMemory;
 
-  /*bool inside = false;
-  Uint8List imageInMemory;
-
-  Future<Uint8List> _capturePng() async {
+/*  Future<Uint8List> _capturePng() async {
     try {
       print('inside');
       inside = true;

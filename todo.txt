@@ -49,6 +49,11 @@
 
 ========= EXPORTING THE RESULTS ==========
 
+[x] - add a button that will trigger the export
+[ ] - watch the video for exporting the widget as an image - https://www.youtube.com/watch?v=DSJ5vONP3XM&ab_channel=JohannesMilke
+[ ] - apply this in a test project
+[ ] - apply it in my project
+
 
 ======= ADDING A BANNER ========
 
