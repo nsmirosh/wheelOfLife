@@ -1,58 +1,14 @@
 
 ========= ENTERING DATA ==========
 
-[x]  Add two controls for entering data for the first area of your life
-[x] - conditionally show the result box in case the fields were filled out
-[x] - display the result of entering those controls in format: area = result
-[x] - extract building the input fields into a separate function
-[x] - implement a seekbar
-[x] - make the seekbar with values only 0 to 10
-[x] - add a button for adding more inputs
-[x] - make each input independent
-[x] - display their results on button click
-[x] - display their results whenever text changes in any of the text fields
-[x] - by default show 8 controls with pre-defined areas of life
-[x] - Add the ability to remove controls
-    [x] - add the delete butotn everywhere
-    [x] - delete and update the views
-    [x] - check that the user won't be able to delete the last 2 inputs
-    [x] - show a dialog saying why they can't delete it
-
-[x] - fix the screen overflow issue
-[x] - code for initialializing inputs - fix the duplication
 
 ========= DISPLAYING THE WHEEL OF LIFE ==========
 
-[x] - transfer the code from the other project into this
-[x] - refactor that code to get rid of the constants and develop an API to interact with my inputs
-[x] - hook up my inputs with the API developed from the wheel
-[x] - make sure parts of the pie are deleted and added whenever the inputs are deleted and added
-[x] - add a grid above the pies to show at what level is the are of life right now
-  [x] - add an empty circle
-  [x] - build 10 empty circles
-  [x] - draw the divider lines between pies
-
-[x] - center the circle
-[x] - make the circle bigger
-[x] - draw a legend near the circle (for the first version of the circle of life)
-  [x] - draw a color in a circle
-  [x] - next to it write the description of what it is
-  [x] - write the value
-
-[x] - implement color choosing in a dialog
-  [x] - change the color only after OK is pressed
-  [x] - add the HEX input controller to be able to input HEX codes for colors - see the color picker example
   [ ] - implement the ability to go back to previous color
 
 [ ] - make maximum number of life areas - 20
 
-
 ========= EXPORTING THE RESULTS ==========
-
-[x] - add a button that will trigger the export
-[ ] - watch the video for exporting the widget as an image - https://www.youtube.com/watch?v=DSJ5vONP3XM&ab_channel=JohannesMilke
-[ ] - apply this in a test project
-[ ] - apply it in my project
 
 
 ======= ADDING A BANNER ========
@@ -99,9 +55,11 @@
 
 ========= DEPLOYING THE APP ==========
 
+[ ] - buy a suitable domain
+    [ ] - wheelofmy.life?
+[ ] - deploy the app with the domain
+
 [ ] - buy wheelof.life domain name for $3000 in case it's $5000
-
-
 
 
 DEPLOY BEFORE DEC 31ST
