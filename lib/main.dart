@@ -10,6 +10,7 @@ import 'package:wheeloflife/utils.dart';
 import 'package:wheeloflife/wheel.dart';
 import 'package:wheeloflife/assets/colors.dart';
 import 'dart:ui' as ui;
+import 'dart:html' as html;
 import 'package:wheeloflife/assets/constants.dart' as Constants;
 import 'package:wheeloflife/widgets/widget_to_image.dart';
 
@@ -24,9 +25,11 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
+        scaffoldBackgroundColor: const Color(0xffFFFFFF),
         primarySwatch: Colors.blue,
       ),
       home: const MyHomePage(title: 'Flutter Demo Home Page'),
@@ -60,8 +63,6 @@ class _MyHomePageState extends State<MyHomePage> {
   late List<Color> colors;
   late Color colorToApply;
   final hexInputTextController = TextEditingController();
-
-  Uint8List? bytes;
 
   @override
   void initState() {
@@ -103,33 +104,37 @@ class _MyHomePageState extends State<MyHomePage> {
     return ListView(
       scrollDirection: Axis.vertical,
       children: <Widget>[
-        Row(
-          children: [
-            WidgetToImage(builder: (key) {
-              key1 = key;
-
-              return buildTheWheel();
-            }),
-            buildLegend(),
-          ],
+        WidgetToImage(
+          builder: (key) {
+            key1 = key;
+            return Container(
+              color: const Color(0xffFFFFFF),
+              child: Row(
+                children: [
+                  buildTheWheel(),
+                  buildLegend(),
+                ],
+              ),
+            );
+          },
         ),
         TextButton(
           onPressed: () async {
             final resultBytes = await Utils.capture(key1);
-            setState(() {
-              bytes = resultBytes;
-            });
+
+            final blob =
+                html.Blob(<dynamic>[resultBytes], 'application/octet-stream');
+            html.AnchorElement(href: html.Url.createObjectUrlFromBlob(blob))
+              ..setAttribute('download', 'wheel_of_life.png')
+              ..click();
           },
           child: const Text("save"),
         ),
         buildInputs(),
         buildAddAreaButton(),
-        buildImage(bytes),
       ],
     );
   }
-
-  Widget buildImage(Uint8List? bytes) => bytes != null ? Image.memory(bytes) : Container();
 
   Widget buildLegend() {
     return SizedBox(

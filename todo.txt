@@ -67,6 +67,7 @@
 ======== FEEDBACK, INTERVIEWS ========
 
 [ ] - Implement the send us your feedback button
+    [ ] - send an email to my email address directly with the the user's feedback - https://www.youtube.com/watch?v=RDwst9icjAY&ab_channel=JohannesMilke
 [ ] - Implement the option to participate in the customer interviews
 
 
