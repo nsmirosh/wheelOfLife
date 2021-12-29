@@ -1,3 +1,4 @@
+import 'dart:math';
 import 'dart:typed_data';
 
 import 'package:flutter/cupertino.dart';
@@ -25,7 +26,6 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-
     return MaterialApp(
       title: 'Flutter Demo',
       theme: ThemeData(
@@ -67,16 +67,31 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    palette4.shuffle();
-    colors = List.generate(
-        palette4.length, (index) => Color(int.parse("0xff${palette4[index]}")));
+    generateThePalette();
 
     for (var areaOfLife in _initialAreasOfLife) {
       final controller = buildTextController(areaOfLife);
       final field = buildTextField(controller);
       _controllers.add(controller);
       _fields.add(field);
-      _sliderValues.add(Constants.DEFAULT_SEEKER_VALUE);
+      _sliderValues.add(Constants.defaulSeekerValue);
+    }
+
+  }
+
+  void generateThePalette() {
+    starting_palette.shuffle();
+
+    colors = List.generate(
+        starting_palette.length,
+            (index) => Color(
+          int.parse("0xff${starting_palette[index]}"),
+        ));
+
+    for (int i = 0; i < Constants.maximumAmountOfLifeAreas - colors.length; i++)  {
+      final random = Random();
+      final color = Color.fromRGBO(random.nextInt(256), random.nextInt(256), random.nextInt(256), 1);
+      colors.add(color);
     }
   }
 
@@ -119,21 +134,22 @@ class _MyHomePageState extends State<MyHomePage> {
           },
         ),
         TextButton(
-          onPressed: () async {
-            final resultBytes = await Utils.capture(key1);
-
-            final blob =
-                html.Blob(<dynamic>[resultBytes], 'application/octet-stream');
-            html.AnchorElement(href: html.Url.createObjectUrlFromBlob(blob))
-              ..setAttribute('download', 'wheel_of_life.png')
-              ..click();
-          },
+          onPressed: () => downloadTheWheel(),
           child: const Text("save"),
         ),
         buildInputs(),
         buildAddAreaButton(),
       ],
     );
+  }
+
+  void downloadTheWheel() async {
+    final resultBytes = await Utils.capture(key1);
+
+    final blob = html.Blob(<dynamic>[resultBytes], 'application/octet-stream');
+    html.AnchorElement(href: html.Url.createObjectUrlFromBlob(blob))
+      ..setAttribute('download', 'wheel_of_life.png')
+      ..click();
   }
 
   Widget buildLegend() {
@@ -191,7 +207,7 @@ class _MyHomePageState extends State<MyHomePage> {
         setState(() {
           _controllers.add(controller);
           _fields.add(field);
-          _sliderValues.add(Constants.DEFAULT_SEEKER_VALUE);
+          _sliderValues.add(Constants.defaulSeekerValue);
         });
       },
       child: const Text(
@@ -201,7 +217,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  TextEditingController buildTextController([String areaOfLife = ""]) {
+  TextEditingController buildTextController([String areaOfLife = "area of life"]) {
     return TextEditingController()
       ..text = areaOfLife
       ..addListener(
@@ -309,7 +325,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 setState(() {
                   if (_controllers.length >
-                      Constants.MINIMUM_AMOUNT_OF_LIFE_AREAS) {
+                      Constants.minimumAmountOfLifeAreas) {
                     _sliderValues.remove(_sliderValues[index]);
                     _controllers.remove(_controllers[index]);
                     _fields.remove(_fields[index]);
@@ -328,30 +344,4 @@ class _MyHomePageState extends State<MyHomePage> {
       },
     );
   }
-
-  bool inside = false;
-  late Uint8List imageInMemory;
-
-/*  Future<Uint8List> _capturePng() async {
-    try {
-      print('inside');
-      inside = true;
-      RenderRepaintBoundary boundary = _globalKey.currentContext.findRenderObject();
-      ui.Image image = await boundary.toImage(pixelRatio: 3.0);
-      ByteData byteData =
-      await image.toByteData(format: ui.ImageByteFormat.png);
-      Uint8List pngBytes = byteData.buffer.asUint8List();
-//      String bs64 = base64Encode(pngBytes);
-//      print(pngBytes);
-//      print(bs64);
-      print('png done');
-      setState(() {
-        imageInMemory = pngBytes;
-        inside = false;
-      });
-      return pngBytes;
-    } catch (e) {
-      print(e);
-    }
-  }*/
 }
