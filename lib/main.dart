@@ -17,6 +17,8 @@ import 'package:wheeloflife/widgets/widget_to_image.dart';
 
 import 'dialogs/dialogs.dart';
 
+
+//TODO attribute this author for the icon <a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by Freepik - Flaticon</a>
 void main() {
   runApp(const MyApp());
 }
@@ -121,6 +123,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return ListView(
       scrollDirection: Axis.vertical,
       children: <Widget>[
+
         WidgetToImage(
           builder: (key) {
             key1 = key;
@@ -345,10 +348,7 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 });
               },
-              child: Text(
-                "delete",
-                style: TextStyle(color: Colors.blueAccent),
-              ),
+              child: Image.asset('assets/images/delete.png', width: 32, height: 32),
             ),
           ],
         );
