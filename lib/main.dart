@@ -19,6 +19,8 @@ import 'dialogs/dialogs.dart';
 
 
 //TODO attribute this author for the icon <a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by Freepik - Flaticon</a>
+//TODO attribute this author <a href="https://www.flaticon.com/free-icons/color" title="color icons">Color icons created by Freepik - Flaticon</a>
+
 void main() {
   runApp(const MyApp());
 }
@@ -330,10 +332,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 showChooseColorDialog(
                     context, index, onColorChosen, buildColorPicker(index));
               },
-              child: Text(
-                "choose color",
-                style: TextStyle(color: Colors.blueAccent),
-              ),
+              child: Image.asset('assets/images/colour.png', width: 32, height: 32),
+
             ),
             TextButton(
               onPressed: () {
