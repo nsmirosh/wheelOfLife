@@ -76,7 +76,6 @@ class _MyHomePageState extends State<MyHomePage> {
       _fields.add(field);
       _sliderValues.add(Constants.defaulSeekerValue);
     }
-
   }
 
   void generateThePalette() {
@@ -84,13 +83,16 @@ class _MyHomePageState extends State<MyHomePage> {
 
     colors = List.generate(
         starting_palette.length,
-            (index) => Color(
-          int.parse("0xff${starting_palette[index]}"),
-        ));
+        (index) => Color(
+              int.parse("0xff${starting_palette[index]}"),
+            ));
 
-    for (int i = 0; i < Constants.maximumAmountOfLifeAreas - colors.length; i++)  {
+    for (int i = 0;
+        i < Constants.maximumAmountOfLifeAreas - colors.length;
+        i++) {
       final random = Random();
-      final color = Color.fromRGBO(random.nextInt(256), random.nextInt(256), random.nextInt(256), 1);
+      final color = Color.fromRGBO(
+          random.nextInt(256), random.nextInt(256), random.nextInt(256), 1);
       colors.add(color);
     }
   }
@@ -155,34 +157,42 @@ class _MyHomePageState extends State<MyHomePage> {
   Widget buildLegend() {
     return SizedBox(
       height: 400,
-      width: 300,
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        itemCount: _controllers.length,
-        itemBuilder: (context, index) {
-          return Padding(
-            padding: const EdgeInsets.only(top: 10),
-            child: Row(
-              children: [
-                Container(
-                  width: 50.0,
-                  height: 50.0,
-                  decoration: new BoxDecoration(
-                    color: colors[index],
-                    shape: BoxShape.circle,
-                  ),
-                ),
-                Padding(
-                  padding: const EdgeInsets.only(left: 30),
-                  child: Text(_controllers[index].text),
-                ),
-                Text(" == ${_sliderValues[index].toInt()}")
-              ],
-            ),
-          );
-        },
+      width: 900,
+      child: GridView.count(
+        crossAxisCount: 3,
+        childAspectRatio: 5,
+        children: getList(),
       ),
     );
+  }
+
+  List<Widget> getList() {
+    List<Widget> children = [];
+    for (var index = 0; index < _controllers.length; index++) {
+      children.add(
+        Padding(
+          padding: const EdgeInsets.only(top: 10),
+          child: Row(
+            children: [
+              Container(
+                width: 50.0,
+                height: 50.0,
+                decoration: new BoxDecoration(
+                  color: colors[index],
+                  shape: BoxShape.circle,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(left: 30),
+                child: Text(_controllers[index].text),
+              ),
+              Text(" == ${_sliderValues[index].toInt()}")
+            ],
+          ),
+        ),
+      );
+    }
+    return children;
   }
 
   Widget buildTheWheel() {
@@ -217,7 +227,8 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  TextEditingController buildTextController([String areaOfLife = "area of life"]) {
+  TextEditingController buildTextController(
+      [String areaOfLife = "area of life"]) {
     return TextEditingController()
       ..text = areaOfLife
       ..addListener(
