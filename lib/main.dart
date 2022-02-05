@@ -10,17 +10,15 @@ import 'package:flutter_xlider/flutter_xlider.dart';
 import 'package:wheeloflife/utils.dart';
 import 'package:wheeloflife/wheel.dart';
 import 'package:wheeloflife/assets/colors.dart';
-import 'dart:ui' as ui;
 import 'dart:html' as html;
 import 'package:wheeloflife/assets/constants.dart' as Constants;
 import 'package:wheeloflife/widgets/widget_to_image.dart';
 
 import 'dialogs/dialogs.dart';
 
-
 //TODO attribute this author for the icon <a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by Freepik - Flaticon</a>
 //TODO attribute this author <a href="https://www.flaticon.com/free-icons/color" title="color icons">Color icons created by Freepik - Flaticon</a>
-
+//todo <a href="https://www.flaticon.com/free-icons/download" title="download icons">Download icons created by Freepik - Flaticon</a>
 void main() {
   runApp(const MyApp());
 }
@@ -73,12 +71,18 @@ class _MyHomePageState extends State<MyHomePage> {
     super.initState();
     generateThePalette();
 
+    var pos = 0;
+
     for (var areaOfLife in _initialAreasOfLife) {
+      final shouldAutoFocus = pos == 0;
+
       final controller = buildTextController(areaOfLife);
-      final field = buildTextField(controller);
+      final field = buildTextField(controller, shouldAutoFocus);
       _controllers.add(controller);
       _fields.add(field);
       _sliderValues.add(Constants.defaulSeekerValue);
+
+      pos++;
     }
   }
 
@@ -125,7 +129,6 @@ class _MyHomePageState extends State<MyHomePage> {
     return ListView(
       scrollDirection: Axis.vertical,
       children: <Widget>[
-
         WidgetToImage(
           builder: (key) {
             key1 = key;
@@ -142,7 +145,19 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         TextButton(
           onPressed: () => downloadTheWheel(),
-          child: const Text("save"),
+          child: Row(
+            children: [
+              Image.asset('assets/images/download-arrow.png',
+                  width: 40, height: 40),
+              Text(
+                "save",
+                style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold),
+              ),
+            ],
+          ),
         ),
         buildInputs(),
         buildAddAreaButton(),
@@ -186,12 +201,25 @@ class _MyHomePageState extends State<MyHomePage> {
                   color: colors[index],
                   shape: BoxShape.circle,
                 ),
+                child: Center(
+                  child: TextField(
+                    /*hint:
+                    "${_sliderValues[index].toInt()}",*/
+                    textAlign: TextAlign.center,
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 30),
-                child: Text(_controllers[index].text),
+                child: Text(
+                  _controllers[index].text,
+                  style: TextStyle(color: Colors.black, fontSize: 16),
+                ),
               ),
-              Text(" == ${_sliderValues[index].toInt()}")
             ],
           ),
         ),
@@ -218,7 +246,7 @@ class _MyHomePageState extends State<MyHomePage> {
     return TextButton(
       onPressed: () {
         final controller = buildTextController();
-        final field = buildTextField(controller);
+        final field = buildTextField(controller, false);
         setState(() {
           _controllers.add(controller);
           _fields.add(field);
@@ -243,10 +271,11 @@ class _MyHomePageState extends State<MyHomePage> {
       );
   }
 
-  TextField buildTextField(TextEditingController controller) {
+  TextField buildTextField(TextEditingController controller, bool autoFocus) {
     return TextField(
       controller: controller,
-      decoration: InputDecoration(border: const OutlineInputBorder()),
+      textAlign: TextAlign.center,
+      autofocus: autoFocus,
     );
   }
 
@@ -332,8 +361,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 showChooseColorDialog(
                     context, index, onColorChosen, buildColorPicker(index));
               },
-              child: Image.asset('assets/images/colour.png', width: 32, height: 32),
-
+              child: Image.asset('assets/images/colour.png',
+                  width: 32, height: 32),
             ),
             TextButton(
               onPressed: () {
@@ -348,7 +377,8 @@ class _MyHomePageState extends State<MyHomePage> {
                   }
                 });
               },
-              child: Image.asset('assets/images/delete.png', width: 32, height: 32),
+              child: Image.asset('assets/images/delete.png',
+                  width: 32, height: 32),
             ),
           ],
         );
