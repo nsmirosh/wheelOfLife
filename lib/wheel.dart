@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
-
 class WheelPainter extends CustomPainter {
   List<int> values = [];
   List<Color> colors = [];
@@ -16,25 +15,26 @@ class WheelPainter extends CustomPainter {
 
   @override
   void paint(Canvas canvas, Size size) {
-    double wheelSize = 200;
+    double wheelSize = 275;
     int totalPossibleGrades = 10;
-
-
 
     double radius = (2 * math.pi) / values.length;
 
-    canvas.drawPath(getWheelPath(wheelSize, 0, radius, values[0] * wheelSize / totalPossibleGrades),
+    canvas.drawPath(
+        getWheelPath(
+            wheelSize, 0, radius, values[0] * wheelSize / totalPossibleGrades),
         getPaint(colors[0]));
 
     for (var i = 1; i < values.length; i++) {
       canvas.drawPath(
-          getWheelPath(wheelSize, radius * i, radius, values[i] * wheelSize / totalPossibleGrades),
+          getWheelPath(wheelSize, radius * i, radius,
+              values[i] * wheelSize / totalPossibleGrades),
           getPaint(colors[i]));
       canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
           getPaint(Colors.black, isStroke: true));
     }
 
-    drawGrid(canvas, wheelSize);
+      drawGrid(canvas, wheelSize);
   }
 
   void drawGrid(Canvas canvas, double wheelSize) {
@@ -42,7 +42,11 @@ class WheelPainter extends CustomPainter {
       canvas.drawCircle(
         Offset(wheelSize, wheelSize),
         wheelSize / 10 * i,
-        getPaint(Colors.black, isStroke: true),
+        getPaint(
+            Color(
+              int.parse("0xffa6aba8"),
+            ),
+            isStroke: true),
       );
     }
   }

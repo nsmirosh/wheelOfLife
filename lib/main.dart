@@ -90,10 +90,11 @@ class _MyHomePageState extends State<MyHomePage> {
     starting_palette.shuffle();
 
     colors = List.generate(
-        starting_palette.length,
-        (index) => Color(
-              int.parse("0xff${starting_palette[index]}"),
-            ));
+      starting_palette.length,
+      (index) => Color(
+        int.parse("0xff${starting_palette[index]}"),
+      ),
+    );
 
     for (int i = 0;
         i < Constants.maximumAmountOfLifeAreas - colors.length;
@@ -136,8 +137,16 @@ class _MyHomePageState extends State<MyHomePage> {
               color: const Color(0xffFFFFFF),
               child: Row(
                 children: [
-                  buildTheWheel(),
-                  buildLegend(),
+                  Padding(
+                    padding: const EdgeInsets.all(24.0),
+                    child: buildTheWheel(),
+                  ),
+                  Expanded(
+                    child: Padding(
+                      padding: const EdgeInsets.fromLTRB(64, 24, 24, 24),
+                      child: buildInputs(),
+                    ),
+                  ),
                 ],
               ),
             );
@@ -159,7 +168,6 @@ class _MyHomePageState extends State<MyHomePage> {
             ],
           ),
         ),
-        buildInputs(),
         buildAddAreaButton(),
       ],
     );
@@ -337,50 +345,73 @@ class _MyHomePageState extends State<MyHomePage> {
       shrinkWrap: true,
       itemCount: _fields.length,
       itemBuilder: (context, index) {
-        return Row(
-          children: [
-            SizedBox(
-              width: 300,
-              child: _fields[index],
-            ),
-            SizedBox(
-              width: 300,
-              child: FlutterSlider(
-                values: [_sliderValues[index].toDouble()],
-                max: 10,
-                min: 0,
-                onDragging: (handlerIndex, lowerValue, upperValue) {
+        return Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Row(
+            children: [
+              Container(
+                width: 70.0,
+                height: 70.0,
+                child: Center(
+                  child: Text(
+                    "${_sliderValues[index].toInt()}",
+                    style: TextStyle(
+                        color: Colors.black,
+                        fontSize: 25,
+                        fontWeight: FontWeight.bold),
+                  ),
+                ),
+                decoration: new BoxDecoration(
+                  color: colors[index],
+                  shape: BoxShape.circle,
+                ),
+              ),
+              SizedBox(
+                width: 250,
+                child: Padding(
+                  padding: const EdgeInsets.all(20.0),
+                  child: _fields[index],
+                ),
+              ),
+              SizedBox(
+                width: 300,
+                child: FlutterSlider(
+                  values: [_sliderValues[index].toDouble()],
+                  max: 10,
+                  min: 0,
+                  onDragging: (handlerIndex, lowerValue, upperValue) {
+                    setState(() {
+                      _sliderValues[index] = lowerValue.toDouble();
+                    });
+                  },
+                ),
+              ),
+              TextButton(
+                onPressed: () {
+                  showChooseColorDialog(
+                      context, index, onColorChosen, buildColorPicker(index));
+                },
+                child: Image.asset('assets/images/colour.png',
+                    width: 32, height: 32),
+              ),
+              TextButton(
+                onPressed: () {
                   setState(() {
-                    _sliderValues[index] = lowerValue.toDouble();
+                    if (_controllers.length >
+                        Constants.minimumAmountOfLifeAreas) {
+                      _sliderValues.remove(_sliderValues[index]);
+                      _controllers.remove(_controllers[index]);
+                      _fields.remove(_fields[index]);
+                    } else {
+                      showMinLifeAreasDialog(context);
+                    }
                   });
                 },
+                child: Image.asset('assets/images/delete.png',
+                    width: 32, height: 32),
               ),
-            ),
-            TextButton(
-              onPressed: () {
-                showChooseColorDialog(
-                    context, index, onColorChosen, buildColorPicker(index));
-              },
-              child: Image.asset('assets/images/colour.png',
-                  width: 32, height: 32),
-            ),
-            TextButton(
-              onPressed: () {
-                setState(() {
-                  if (_controllers.length >
-                      Constants.minimumAmountOfLifeAreas) {
-                    _sliderValues.remove(_sliderValues[index]);
-                    _controllers.remove(_controllers[index]);
-                    _fields.remove(_fields[index]);
-                  } else {
-                    showMinLifeAreasDialog(context);
-                  }
-                });
-              },
-              child: Image.asset('assets/images/delete.png',
-                  width: 32, height: 32),
-            ),
-          ],
+            ],
+          ),
         );
       },
     );
