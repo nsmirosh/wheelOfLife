@@ -173,68 +173,7 @@ class _MyHomePageState extends State<MyHomePage> {
     );
   }
 
-  void downloadTheWheel() async {
-    final resultBytes = await Utils.capture(key1);
 
-    final blob = html.Blob(<dynamic>[resultBytes], 'application/octet-stream');
-    html.AnchorElement(href: html.Url.createObjectUrlFromBlob(blob))
-      ..setAttribute('download', 'wheel_of_life.png')
-      ..click();
-  }
-
-  Widget buildLegend() {
-    return SizedBox(
-      height: 400,
-      width: 900,
-      child: GridView.count(
-        crossAxisCount: 3,
-        childAspectRatio: 5,
-        children: getList(),
-      ),
-    );
-  }
-
-  List<Widget> getList() {
-    List<Widget> children = [];
-    for (var index = 0; index < _controllers.length; index++) {
-      children.add(
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(
-            children: [
-              Container(
-                width: 50.0,
-                height: 50.0,
-                decoration: new BoxDecoration(
-                  color: colors[index],
-                  shape: BoxShape.circle,
-                ),
-                child: Center(
-                  child: TextField(
-                    /*hint:
-                    "${_sliderValues[index].toInt()}",*/
-                    textAlign: TextAlign.center,
-                    style: TextStyle(
-                        color: Colors.black,
-                        fontSize: 20,
-                        fontWeight: FontWeight.bold),
-                  ),
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.only(left: 30),
-                child: Text(
-                  _controllers[index].text,
-                  style: TextStyle(color: Colors.black, fontSize: 16),
-                ),
-              ),
-            ],
-          ),
-        ),
-      );
-    }
-    return children;
-  }
 
   Widget buildTheWheel() {
     return Center(
@@ -350,8 +289,8 @@ class _MyHomePageState extends State<MyHomePage> {
           child: Row(
             children: [
               Container(
-                width: 70.0,
-                height: 70.0,
+                width: 60.0,
+                height: 60.0,
                 child: Center(
                   child: Text(
                     "${_sliderValues[index].toInt()}",
@@ -369,7 +308,7 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(
                 width: 250,
                 child: Padding(
-                  padding: const EdgeInsets.all(20.0),
+                  padding: const EdgeInsets.all(10.0),
                   child: _fields[index],
                 ),
               ),
@@ -415,5 +354,14 @@ class _MyHomePageState extends State<MyHomePage> {
         );
       },
     );
+  }
+
+  void downloadTheWheel() async {
+    final resultBytes = await Utils.capture(key1);
+
+    final blob = html.Blob(<dynamic>[resultBytes], 'application/octet-stream');
+    html.AnchorElement(href: html.Url.createObjectUrlFromBlob(blob))
+      ..setAttribute('download', 'wheel_of_life.png')
+      ..click();
   }
 }
