@@ -1,5 +1,14 @@
 {
   "projects": {
     "default": "wheel-of-life-2df42"
+  },
+  "targets": {
+    "wheel-of-life-2df42": {
+      "hosting": {
+        "admin": [
+          "wheeloflife.me"
+        ]
+      }
+    }
   }
 }

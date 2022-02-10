@@ -36,6 +36,7 @@ dependencies:
   cupertino_icons: ^1.0.2
   flutter_xlider: ^3.4.0
   flutter_colorpicker: ^1.0.3
+  url_launcher: ^5.7.10
 
 dev_dependencies:
   flutter_test:

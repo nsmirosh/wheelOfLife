@@ -30,8 +30,8 @@ class WheelPainter extends CustomPainter {
           getWheelPath(wheelSize, radius * i, radius,
               values[i] * wheelSize / totalPossibleGrades),
           getPaint(colors[i]));
-      canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
-          getPaint(Colors.black, isStroke: true));
+      // canvas.drawPath(getWheelPath(wheelSize, radius * i, radius, wheelSize),
+      //     getPaint(Colors.black, isStroke: true));
     }
 
       drawGrid(canvas, wheelSize);

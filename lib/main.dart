@@ -7,6 +7,7 @@ import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_colorpicker/flutter_colorpicker.dart';
 import 'package:flutter_xlider/flutter_xlider.dart';
+import 'package:url_launcher/url_launcher.dart';
 import 'package:wheeloflife/utils.dart';
 import 'package:wheeloflife/wheel.dart';
 import 'package:wheeloflife/assets/colors.dart';
@@ -16,6 +17,7 @@ import 'package:wheeloflife/widgets/widget_to_image.dart';
 
 import 'dialogs/dialogs.dart';
 
+//TODO attribute this <a target="_blank" href="https://icons8.com/icon/1Ia1TnSUAVrK/color-wheel">Color Wheel</a> icon by <a target="_blank" href="https://icons8.com">Icons8</a>
 //TODO attribute this author for the icon <a href="https://www.flaticon.com/free-icons/delete" title="delete icons">Delete icons created by Freepik - Flaticon</a>
 //TODO attribute this author <a href="https://www.flaticon.com/free-icons/color" title="color icons">Color icons created by Freepik - Flaticon</a>
 //todo <a href="https://www.flaticon.com/free-icons/download" title="download icons">Download icons created by Freepik - Flaticon</a>
@@ -29,12 +31,12 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Wheel of life',
       theme: ThemeData(
         scaffoldBackgroundColor: const Color(0xffFFFFFF),
         primarySwatch: Colors.blue,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Wheel of Life 2022'),
     );
   }
 }
@@ -130,6 +132,27 @@ class _MyHomePageState extends State<MyHomePage> {
     return ListView(
       scrollDirection: Axis.vertical,
       children: <Widget>[
+        Align(
+          alignment: Alignment.centerRight,
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: SizedBox(
+              width: 300,
+              child: ElevatedButton(
+                onPressed: () {
+                  _launchURL();
+                },
+                style: ElevatedButton.styleFrom(
+                  primary: Colors.red, // This is what you need!
+                ),
+                child: const Text(
+                  "support us on Patreon",
+                  style: TextStyle(color: Colors.white, fontSize: 20),
+                ),
+              ),
+            ),
+          ),
+        ),
         WidgetToImage(
           builder: (key) {
             key1 = key;
@@ -152,24 +175,47 @@ class _MyHomePageState extends State<MyHomePage> {
             );
           },
         ),
-        TextButton(
-          onPressed: () => downloadTheWheel(),
-          child: Row(
-            children: [
-              Image.asset('assets/images/download-arrow.png',
-                  width: 40, height: 40),
-              Text(
-                "save",
-                style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 20,
-                    fontWeight: FontWeight.bold),
-              ),
-            ],
+        buildAddAreaButton(),
+        buildDownloadButton(),
+      ],
+    );
+  }
+
+  _launchURL() async {
+    const url = 'https://patreon.com/nsmirosh';
+    if (await canLaunch(url)) {
+      await launch(url);
+    } else {
+      throw 'Could not launch $url';
+    }
+  }
+
+
+  Widget buildDownloadButton() {
+    return  Align(
+      alignment: Alignment(-0.5, 0),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 20),
+        child: SizedBox(
+          width: 100,
+          child: TextButton(
+            onPressed: () => downloadTheWheel(),
+            child: Row(
+              children: [
+                Image.asset('assets/images/download-arrow.png',
+                    width: 40, height: 40),
+                Text(
+                  "save",
+                  style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 20,
+                      fontWeight: FontWeight.bold),
+                ),
+              ],
+            ),
           ),
         ),
-        buildAddAreaButton(),
-      ],
+      ),
     );
   }
 
@@ -190,19 +236,28 @@ class _MyHomePageState extends State<MyHomePage> {
   }
 
   Widget buildAddAreaButton() {
-    return TextButton(
-      onPressed: () {
-        final controller = buildTextController();
-        final field = buildTextField(controller, false);
-        setState(() {
-          _controllers.add(controller);
-          _fields.add(field);
-          _sliderValues.add(Constants.defaulSeekerValue);
-        });
-      },
-      child: const Text(
-        "add another area",
-        style: TextStyle(color: Colors.black),
+    return Align(
+      alignment: Alignment(0.5, 0),
+      child: Padding(
+        padding: const EdgeInsets.fromLTRB(0, 0, 0, 50),
+        child: SizedBox(
+          width: 200,
+          child: ElevatedButton(
+            onPressed: () {
+              final controller = buildTextController();
+              final field = buildTextField(controller, false);
+              setState(() {
+                _controllers.add(controller);
+                _fields.add(field);
+                _sliderValues.add(Constants.defaulSeekerValue);
+              });
+            },
+            child: const Text(
+              "add life area",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+            ),
+          ),
+        ),
       ),
     );
   }
